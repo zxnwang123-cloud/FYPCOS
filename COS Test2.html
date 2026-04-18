@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CargoLink OA Prototype</title>
+  <style>
+    body.dark-mode {
+      --bg: #0b1220;
+      --card: #111827;
+      --text: #e5edf7;
+      --muted: #94a3b8;
+      --primary: #1d4f91;
+      --primary-2: #3b82f6;
+      --border: #243244;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --soft-danger: #2b1416;
+      --soft-warning: #2b2112;
+      --soft-success: #10251a;
+      --soft-primary: #122235;
+      --shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+    body.dark-mode { background: linear-gradient(135deg, #0b1220, #101827 45%, #0f172a); }
+    body.dark-mode .card,
+    body.dark-mode .login-card,
+    body.dark-mode .cargo-card,
+    body.dark-mode .modal-card,
+    body.dark-mode .alerts-dropdown,
+    body.dark-mode .dropdown-menu,
+    body.dark-mode .meta-box,
+    body.dark-mode .demo-box,
+    body.dark-mode .notice,
+    body.dark-mode .panel-hidden-note,
+    body.dark-mode .bind-item,
+    body.dark-mode .permission-item,
+    body.dark-mode .user-card,
+    body.dark-mode .client-card,
+    body.dark-mode .brand-summary-card {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background: #0f172a;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    body.dark-mode .meta-box {
+      background: #0f172a;
+      border-color: #243244;
+    }
+    body.dark-mode .notice {
+      background: #10233a;
+      border-color: #264f7a;
+      color: #dbeafe;
+    }
+    body.dark-mode .notice.warning {
+      background: #2b2112;
+      border-color: #b7791f;
+      color: #fde68a;
+    }
+    body.dark-mode .btn-secondary,
+    body.dark-mode .login-tab,
+    body.dark-mode .icon-btn,
+    body.dark-mode .login-card-top .language-switch,
+    body.dark-mode .theme-switch {
+      background: #162335;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    body.dark-mode .theme-switch .theme-label {
+      color: rgba(255,255,255,0.98);
+    }
+    body.dark-mode .dropdown-item:hover,
+    body.dark-mode .header-link:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    body.dark-mode .header-link.active {
+      background: white;
+      color: var(--primary);
+    }
+    body.dark-mode .small,
+    body.dark-mode .section-note,
+    body.dark-mode .muted,
+    body.dark-mode .subtext,
+    body.dark-mode .meta-label,
+    body.dark-mode .demo-box,
+    body.dark-mode .modal-card p,
+    body.dark-mode .login-card-top .language-label {
+      color: var(--muted);
+    }
+    body.dark-mode .timeline-step { background: #0f172a; border-color: var(--border); color: var(--muted); }
+    body.dark-mode .timeline-step.current { background: #16365f; border-color: #3b82f6; color: #dbeafe; }
+    body.dark-mode .timeline-step.done { background: #17412a; border-color: #22c55e; color: #bbf7d0; }
+    body.dark-mode .system-clock { background: rgba(14, 53, 96, 0.98); }
+    body.dark-mode .brand-panel { background: linear-gradient(160deg, #071a31 0%, #0b2e55 45%, #114577 100%); }
+    body.dark-mode .brand-summary-card { background: rgba(255,255,255,0.05); }
+    body.dark-mode .stat-card,
+    body.dark-mode #dashboardTeamSection {
+      background: #0f1b2d;
+    }
+    body.dark-mode .cargo-card.warning {
+      background: #2b2112;
+      border-color: #b7791f;
+    }
+    body.dark-mode .cargo-card.urgent {
+      background: #34161a;
+      border-color: #dc2626;
+    }
+    body.dark-mode .cargo-card.completed {
+      background: #10251a;
+      border-color: #16a34a;
+    }
+    body.dark-mode .app-header .eyebrow,
+    body.dark-mode .app-header h1,
+    body.dark-mode .app-header p,
+    body.dark-mode .brand-panel .eyebrow,
+    body.dark-mode .brand-top p,
+    body.dark-mode .brand-mark-text span,
+    body.dark-mode .brand-summary-card p { color: rgba(255,255,255,0.86); }
+    body.dark-mode .badge.owner { background: #243447; color: #e2e8f0; }
+    body.dark-mode .badge.phase { background: #16365f; color: #dbeafe; }
+    body.dark-mode .badge.permission { background: #17412a; color: #bbf7d0; }
+    body.dark-mode .badge.alert { background: #4c1d1d; color: #fecaca; }
+    .team-group-card {
+      width: 100%;
+      min-height: 0;
+      padding: 10px 12px;
+    }
+    .team-group-title {
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .team-member-list {
+      display: grid;
+      gap: 8px;
+    }
+    .team-member-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: #f8fbff;
+    }
+    .team-member-name {
+      font-weight: 700;
+      color: var(--text);
+    }
+    body.dark-mode .team-member-card {
+      background: #162335;
+      border-color: #29415f;
+    }
+    body.dark-mode .team-member-name {
+      color: #e5edf7;
+    }
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #0f4c81;
+      --primary-2: #1d70b8;
+      --border: #dbe3ee;
+      --success: #0f9d58;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --soft-danger: #fff2f2;
+      --soft-warning: #fff7ed;
+      --soft-success: #ecfdf5;
+      --soft-primary: #eef6ff;
+      --shadow: 0 10px 25px rgba(15, 76, 129, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+    body { background: linear-gradient(135deg, #edf4ff, #f8fbff 45%, #eef7f7); color: var(--text); min-height: 100vh; }
+    .hidden { display: none !important; }
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 20px 28px 28px;
+    }
+    .container > header,
+    .container > section {
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .login-shell { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 0.9fr; }
+    .brand-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255,255,255,0.16), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.10), transparent 22%),
+        linear-gradient(160deg, #0b3b66 0%, #0f4c81 45%, #1d70b8 100%);
+      color: white;
+      padding: 56px 52px 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      inset: auto -140px -140px auto;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      left: -110px;
+      bottom: -110px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .brand-top {
+      position: relative;
+      z-index: 1;
+      max-width: 620px;
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .brand-mark-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-mark-text strong {
+      font-size: 15px;
+      letter-spacing: 0.04em;
+    }
+    .brand-mark-text span {
+      font-size: 12px;
+      color: rgba(255,255,255,0.78);
+    }
+    .brand-top h1 {
+      font-size: 48px;
+      margin-bottom: 16px;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      max-width: 540px;
+    }
+    .brand-top p {
+      max-width: 560px;
+      line-height: 1.75;
+      font-size: 18px;
+      color: rgba(255,255,255,0.92);
+    }
+    .brand-summary {
+      position: relative;
+      z-index: 1;
+      margin-top: 34px;
+      max-width: 560px;
+      display: grid;
+      gap: 14px;
+    }
+    .brand-summary-card {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 18px 20px;
+      backdrop-filter: blur(10px);
+    }
+    .brand-summary-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .brand-summary-card p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .login-panel { display: flex; align-items: center; justify-content: center; padding: 32px; }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .login-card { width: 100%; max-width: 480px; padding: 32px; }
+    .login-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .login-card-top .login-card-controls {
+      margin-left: auto;
+    }
+    .login-card-controls {
+      display: grid;
+      gap: 10px;
+      justify-items: start;
+      width: 100%;
+    }
+    .login-card-controls .theme-switch {
+      justify-self: end;
+    }
+    .theme-switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      width: 96px;
+      height: 44px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .theme-switch .theme-label {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      user-select: none;
+    }
+    .theme-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      transition: transform 0.22s ease;
+      z-index: 1;
+    }
+    .theme-switch.dark .theme-thumb { transform: translateX(44px); }
+    .theme-switch.light-active .theme-label:first-child,
+    .theme-switch.dark .theme-label:last-child { color: white; }
+    .theme-switch.dark .theme-label:first-child,
+    .theme-switch.light-active .theme-label:last-child { color: rgba(255,255,255,0.72); }
+    .login-card-top .theme-switch {
+      border-color: #cfe0f2;
+      background: #eef5fb;
+    }
+    .login-card-top .theme-switch .theme-label {
+      color: rgba(255,255,255,0.96);
+    }
+    .login-card-top .theme-switch.light-active .theme-label:first-child,
+    .login-card-top .theme-switch.dark .theme-label:last-child {
+      color: white;
+    }
+    .language-switch {
+      border-color: #cfe0f2;
+      background: #eef5fb;
+      box-shadow: none;
+    }
+    .login-card-top .language-thumb {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+    .login-card-top .language-label {
+      color: #4b6480;
+    }
+    .login-card-top .language-label.active {
+      color: white;
+    }
+    .login-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .login-tab {
+      flex: 1; border: 1px solid var(--border); background: white; color: var(--text);
+      border-radius: 12px; padding: 11px 14px; font-weight: 700; cursor: pointer;
+    }
+    .login-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .eyebrow {
+      color: var(--primary-2);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      font-size: 12px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .brand-panel .eyebrow {
+      color: rgba(255,255,255,0.72);
+    }
+    .login-card h2 {
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .subtext { color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+
+    input, select, textarea {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: #fff; font-size: 14px; outline: none; transition: 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary-2); box-shadow: 0 0 0 4px rgba(29, 112, 184, 0.12); }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; }
+    .btn-secondary { background: #eef5fb; color: var(--primary); }
+    .btn-danger { background: #fee2e2; color: #991b1b; }
+    .btn-full { width: 100%; }
+    .btn-primary:hover, .btn-secondary:hover, .icon-btn:hover, .language-switch:hover, .login-tab:hover { transform: translateY(-1px); }
+
+    .demo-box { background: #f8fbff; border: 1px dashed #bfd4e6; border-radius: 14px; padding: 14px; margin-top: 18px; font-size: 13px; line-height: 1.6; color: #35526b; }
+    .error { color: var(--danger); font-size: 14px; margin-top: 10px; min-height: 20px; }
+    .success-text { color: var(--success); }
+
+    .app-header {
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+      margin-bottom: 24px;
+      min-height: 132px;
+      background: linear-gradient(135deg, #0b3b66, #0f4c81);
+      backdrop-filter: blur(10px);
+      padding: 18px 24px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      box-shadow: 0 14px 30px rgba(11, 59, 102, 0.22);
+    }
+    .app-header .eyebrow,
+    .app-header h1,
+    .app-header p {
+      color: white;
+    }
+    .app-header .eyebrow {
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+    .app-header p {
+      color: rgba(255,255,255,0.82);
+    }
+    .header-left {
+      min-width: 0;
+      max-width: calc(100% - 760px);
+      padding-right: 16px;
+      padding-top: 4px;
+    }
+    .header-left h1 {
+      font-size: 19px;
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .header-left p { color: var(--muted); }
+    .header-actions {
+      position: absolute;
+      top: 14px;
+      right: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: nowrap;
+      min-width: max-content;
+    }
+    .header-controls-stack {
+      display: grid;
+      gap: 8px;
+      justify-items: start;
+      align-items: start;
+      flex-shrink: 0;
+      width: 96px;
+    }
+    .header-controls-stack .language-switch,
+    .header-controls-stack .theme-switch {
+      width: 96px;
+      max-width: 96px;
+    }
+    .app-header .theme-switch {
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.12);
+      display: inline-flex;
+    }
+    .app-header .theme-switch .theme-label {
+      color: rgba(255,255,255,0.96);
+    }
+    .app-header .theme-switch.light-active .theme-label:first-child,
+    .app-header .theme-switch.dark .theme-label:last-child {
+      color: white;
+    }
+    .app-header .theme-switch.dark .theme-label:first-child,
+    .app-header .theme-switch.light-active .theme-label:last-child {
+      color: rgba(255,255,255,0.72);
+    }
+    .language-switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      width: 96px;
+      height: 44px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .language-label {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      transition: 0.2s ease;
+      user-select: none;
+    }
+    .language-label:last-of-type {
+      font-size: 12px;
+    }
+    .language-label.active {
+      color: white;
+    }
+    .language-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      transition: transform 0.22s ease;
+      z-index: 1;
+    }
+    .language-switch.zh .language-thumb {
+      transform: translateX(44px);
+    }
+    .dropdown-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .dropdown-arrow {
+      font-size: 10px;
+      line-height: 1;
+      opacity: 0.9;
+      position: relative;
+      top: 1px;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 190px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 8px;
+      z-index: 60;
+    }
+    .dropdown-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .dropdown-item:hover {
+      background: #f3f7fb;
+    }
+    .header-link {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      flex-shrink: 0;
+    }
+    .header-link:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.16);
+    }
+    .header-link.active {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+    }
+    .app-header .btn-secondary {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.18);
+      flex-shrink: 0;
+    }
+    .app-header .btn-secondary:hover {
+      background: rgba(255,255,255,0.18);
+    }
+    .app-header .language-switch,
+    .app-header .icon-btn {
+      box-shadow: none;
+    }
+    .app-header .language-label {
+      color: rgba(255,255,255,0.8);
+    }
+    html[lang="zh-CN"] body,
+    html[lang="zh-CN"] button,
+    html[lang="zh-CN"] input,
+    html[lang="zh-CN"] select,
+    html[lang="zh-CN"] textarea,
+    html[lang="zh-CN"] label,
+    html[lang="zh-CN"] .language-label,
+    html[lang="zh-CN"] .header-link,
+    html[lang="zh-CN"] .btn,
+    html[lang="zh-CN"] .dropdown-item {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: inherit;
+      font-weight: inherit;
+      line-height: inherit;
+    }
+    html[lang="zh-CN"] .header-left h1,
+    html[lang="zh-CN"] .login-card h2,
+    html[lang="zh-CN"] .panel-head h2,
+    html[lang="zh-CN"] .cargo-top h3 {
+      letter-spacing: 0;
+      font-size: inherit;
+      line-height: inherit;
+      font-weight: inherit;
+    }
+    .bell-wrap { position: relative; }
+    .icon-btn {
+      width: 46px; height: 46px; border-radius: 14px; border: 1px solid var(--border);
+      background: white; cursor: pointer; font-size: 20px; position: relative;
+    }
+    .alert-badge {
+      position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; border-radius: 999px;
+      background: var(--danger); color: white; font-size: 12px; font-weight: 700; display: flex;
+      align-items: center; justify-content: center; padding: 0 6px; border: 2px solid white;
+    }
+    .alerts-dropdown {
+      position: absolute; top: 58px; right: 0; width: 360px; max-height: 460px; overflow: auto;
+      background: white; border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); padding: 14px; z-index: 50;
+    }
+    .alerts-dropdown h3 { font-size: 18px; margin-bottom: 10px; }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 0 auto 20px;
+      width: 100%;
+    }
+    .stat-card { padding: 20px; }
+    .stat-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-card .value { font-size: 28px; font-weight: 800; }
+    .danger-accent { border-left: 5px solid var(--danger); }
+    .warning-accent { border-left: 5px solid var(--warning); }
+    .success-accent { border-left: 5px solid var(--success); }
+    body.dark-mode .danger-accent { border-left-color: #ef4444; box-shadow: inset 0 0 0 1px rgba(239,68,68,0.12); }
+    body.dark-mode .warning-accent { border-left-color: #f59e0b; box-shadow: inset 0 0 0 1px rgba(245,158,11,0.12); }
+    body.dark-mode .success-accent { border-left-color: #22c55e; box-shadow: inset 0 0 0 1px rgba(34,197,94,0.12); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.95fr);
+      gap: 18px;
+      align-items: stretch;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .layout.compact { grid-template-columns: 1fr; }
+    .panel {
+      padding: 20px;
+      height: 100%;
+    }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .panel-head h2 {
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+    .search-row { display: grid; grid-template-columns: 1fr 200px; gap: 12px; margin-bottom: 16px; }
+    .cargo-list {
+      display: grid;
+      gap: 14px;
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+    }
+
+    .cargo-card { border: 1px solid var(--border); border-radius: 18px; padding: 18px; background: white; }
+    .cargo-card.urgent { background: var(--soft-danger); border-color: #fecaca; }
+    .cargo-card.warning { background: var(--soft-warning); border-color: #fed7aa; }
+    .cargo-card.completed { background: var(--soft-success); border-color: #a7f3d0; }
+    .cargo-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 12px; }
+    .cargo-top h3 {
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .badge {
+      padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .badge.phase { background: #e8f1fa; color: var(--primary); }
+    .badge.owner { background: #f3f4f6; color: #374151; }
+    .badge.alert { background: #fee2e2; color: #991b1b; }
+    .badge.permission { background: #edf7ed; color: #176534; }
+
+    .meta-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0; }
+    .meta-box { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 12px; padding: 12px; }
+    .meta-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+    .timeline { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    .timeline-step { text-align: center; padding: 10px 6px; border-radius: 12px; border: 1px solid var(--border); font-size: 12px; background: #fff; }
+    .timeline-step.done { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; font-weight: 700; }
+    .timeline-step.current { background: #e8f1fa; border-color: #bfdbfe; color: var(--primary); font-weight: 700; }
+
+    .section-note, .muted { color: var(--muted); line-height: 1.6; font-size: 14px; }
+    .alert-item { border: 1px solid var(--border); border-left: 5px solid var(--warning); border-radius: 14px; padding: 14px; margin-bottom: 12px; background: white; }
+    .alert-item.urgent { border-left-color: var(--danger); background: var(--soft-danger); }
+    .alert-item.success { border-left-color: var(--success); background: var(--soft-success); }
+    .alert-item h4 { font-size: 15px; margin-bottom: 6px; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .footer-note { margin-top: 18px; background: #f8fbff; border: 1px solid var(--border); border-radius: 14px; padding: 14px; color: #4b5563; font-size: 13px; line-height: 1.6; }
+    .small { font-size: 12px; color: var(--muted); }
+    .brand-panel .small {
+      position: relative;
+      z-index: 1;
+      color: rgba(255,255,255,0.68);
+    }
+    .notice { background: var(--soft-primary); border: 1px solid #cfe2ff; color: #174c7d; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.6; margin-bottom: 14px; }
+    .notice.warning { background: var(--soft-warning); border-color: #fed7aa; color: #9a5310; }
+
+    .permission-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+    .permission-item { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+    .permission-item input { width: auto; margin-top: 2px; }
+    .user-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+      max-height: 540px;
+      overflow-y: auto;
+      overflow-x: visible;
+      padding-right: 6px;
+    }
+    .user-card, .client-card { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: white; }
+    .user-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .user-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .right-stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      height: 100%;
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    #staffAccountPage .right-stack,
+    #clientAccountPage .right-stack {
+      max-width: 1180px;
+    }
+    .panel-hidden-note { background: #f9fafb; border: 1px dashed var(--border); color: var(--muted); border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.6; }
+
+    .client-layout { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .client-project-grid { display: grid; gap: 14px; }
+    .bind-list { display: grid; gap: 8px; max-height: 220px; overflow: auto; }
+    .bind-item { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+    .bind-item input { width: auto; margin-top: 2px; }
+    .system-clock {
+      position: fixed; left: 18px; bottom: 18px; z-index: 40; background: rgba(15, 76, 129, 0.96); color: white;
+      padding: 12px 14px; border-radius: 14px; box-shadow: var(--shadow); min-width: 210px;
+    }
+    .system-clock .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.8; }
+    .system-clock .time { font-size: 17px; font-weight: 800; margin-top: 3px; }
+    .system-clock .date { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 120;
+      padding: 20px;
+    }
+    .modal-card {
+      width: 100%;
+      max-width: 520px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+      padding: 22px;
+    }
+    .modal-card h3 { font-size: 22px; margin-bottom: 10px; }
+    .modal-card p { color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+
+    @media (max-width: 1400px) {
+      #dashboardBodyLayout {
+        grid-template-columns: 1fr !important;
+      }
+      #dashboardTeamSection {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+    }
+    @media (max-width: 1180px) {
+      .login-shell, .layout { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .app-header {
+        min-height: auto;
+        display: block;
+      }
+      .header-left {
+        max-width: 100%;
+        padding-right: 0;
+      }
+      .header-actions {
+        position: static;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        min-width: 0;
+        margin-top: 14px;
+      }
+      .header-controls-stack {
+        justify-items: start;
+      }
+      .right-stack {
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 760px) {
+      .container { padding: 14px; }
+      .grid-4, .form-grid, .search-row, .meta-grid, .feature-grid, .permission-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .brand-panel { padding: 28px; }
+      .login-card { padding: 24px; }
+      .alerts-dropdown { width: min(340px, calc(100vw - 32px)); right: -20px; }
+      .system-clock { left: 12px; right: 12px; bottom: 12px; min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loginView" class="login-shell">
+    <section class="brand-panel">
+      <div class="brand-top">
+        <div class="brand-mark">
+          <div class="brand-logo">COS</div>
+          <div class="brand-mark-text">
+            <strong id="brandCompany">COS</strong>
+            <span id="brandCompanySub">Cargo Operations System</span>
+          </div>
+        </div>
+        <div class="eyebrow" id="brandEyebrow">Singapore Polytechnic FYP Prototype</div>
+        <h1 id="brandTitle">COS Cargo Operations Portal</h1>
+        <p id="brandIntro">A modern internal portal for COS teams to manage cargo updates, workflow ownership, and shipment visibility across offices and stakeholders.</p>
+        <div class="brand-summary">
+          <div class="brand-summary-card">
+            <h3 id="brandSummaryTitle">Built for faster cargo coordination</h3>
+            <p id="brandSummaryDesc">Designed for clearer handovers between order intake, operations, logistics, customs, and clients, with a cleaner interface for daily use.</p>
+          </div>
+        </div>
+      </div>
+      <div class="small" id="demoFooter">Demo purpose only. This version uses browser storage and sample accounts for FYP presentation.</div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card card">
+        <div class="login-card-top">
+          <div class="login-card-controls">
+            <button id="loginLanguageSwitch" class="language-switch" type="button" onclick="toggleLanguage()" aria-label="Language toggle">
+              <span id="loginLangLabelEn" class="language-label active">EN</span>
+              <span id="loginLangLabelZh" class="language-label">中文</span>
+              <span class="language-thumb"></span>
+            </button>
+            <button id="loginThemeSwitch" class="theme-switch light-active" type="button" onclick="toggleTheme()" aria-label="Theme toggle">
+              <span class="theme-label" id="loginThemeLight">☀</span>
+              <span class="theme-label" id="loginThemeDark">☾</span>
+              <span class="theme-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="login-tabs">
+          <button id="staffTab" class="login-tab active" onclick="setLoginMode('staff')">Staff Login</button>
+          <button id="clientTab" class="login-tab" onclick="setLoginMode('client')">Client Login</button>
+        </div>
+
+        <div class="eyebrow" id="loginEyebrow">Sign in</div>
+        <h2 id="loginTitle">Welcome back</h2>
+        <p class="subtext" id="loginSubtext">Use one of the sample accounts below to test the OA workflow.</p>
+
+        <div class="form-group">
+          <label for="username" id="usernameLabel">Username</label>
+          <input id="username" type="text" placeholder="Enter username" />
+        </div>
+        <div class="form-group">
+          <label for="password" id="passwordLabel">Password</label>
+          <input id="password" type="password" placeholder="Enter password" />
+        </div>
+        <button id="loginBtn" class="btn btn-primary btn-full" onclick="login()">Login</button>
+        <div id="loginError" class="error"></div>
+        <div class="demo-box" id="demoAccountsBox"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="appView" class="hidden">
+    <div class="container">
+      <header class="app-header">
+        <div class="header-left">
+          <div class="eyebrow" id="dashboardEyebrow">Cargo Visibility Dashboard</div>
+          <h1 id="welcomeText">Welcome</h1>
+          <p id="welcomeSub">Track shipment phases, owners, dates, and alerts.</p>
+        </div>
+        <div class="header-actions">
+          <div id="bellWrap" class="bell-wrap">
+            <button class="icon-btn" onclick="toggleAlerts(event)" title="Notifications">🔔<span id="alertCount" class="alert-badge">0</span></button>
+            <div id="alertsDropdown" class="alerts-dropdown hidden" onclick="event.stopPropagation()">
+              <h3 id="alertsTitle">Priority Alerts</h3>
+              <div id="alertsContainer"></div>
+            </div>
+          </div>
+          <div class="header-controls-stack">
+            <button id="languageSwitch" class="language-switch" type="button" onclick="toggleLanguage()" aria-label="Language toggle">
+              <span id="langLabelEn" class="language-label active">EN</span>
+              <span id="langLabelZh" class="language-label">中文</span>
+              <span class="language-thumb"></span>
+            </button>
+            <button id="themeSwitch" class="theme-switch light-active" type="button" onclick="toggleTheme()" aria-label="Theme toggle">
+              <span class="theme-label" id="themeLight">☀</span>
+              <span class="theme-label" id="themeDark">☾</span>
+              <span class="theme-thumb"></span>
+            </button>
+          </div>
+          <button id="dashboardNavBtn" class="header-link active" onclick="showStaffPage('dashboard')">Dashboard</button>
+          <div id="operationsWrap" class="dropdown-wrap">
+            <button id="operationsNavBtn" class="header-link dropdown-trigger active" onclick="toggleOperationsMenu(event)">
+              <span id="operationsNavLabel">Operations</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <div id="operationsDropdown" class="dropdown-menu hidden" onclick="event.stopPropagation()">
+              <button id="operationsOverviewMenuBtn" class="dropdown-item" onclick="showOperationsOverview()">Shipment Overview</button>
+              <button id="operationsCompletedMenuBtn" class="dropdown-item" onclick="showCompletedTasksPage()">Completed Tasks</button>
+            </div>
+          </div>
+          <div id="accountMgmtWrap" class="dropdown-wrap hidden">
+            <button id="accountMgmtBtn" class="header-link dropdown-trigger" onclick="toggleAccountMenu(event)">
+              <span id="accountMgmtBtnLabel">Account Management</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <div id="accountMgmtDropdown" class="dropdown-menu hidden" onclick="event.stopPropagation()">
+              <button id="staffAccountMenuBtn" class="dropdown-item" onclick="showAdminSection('staff')">Staff Account</button>
+              <button id="clientAccountMenuBtn" class="dropdown-item" onclick="showAdminSection('client')">Client Account</button>
+            </div>
+          </div>
+          <div id="resetWrap" class="dropdown-wrap hidden">
+            <button id="resetMenuBtn" class="btn btn-secondary dropdown-trigger" onclick="toggleResetMenu(event)">
+              <span id="resetMenuBtnLabel">Reset</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <div id="resetDropdown" class="dropdown-menu hidden" onclick="event.stopPropagation()">
+              <button id="resetCargoBtn" class="dropdown-item" onclick="seedDemoData()">Reset Cargo</button>
+              <button id="resetUsersBtn" class="dropdown-item" onclick="seedUsers(true)">Reset Users</button>
+            </div>
+          </div>
+          <button id="logoutBtn" class="btn btn-secondary" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <section id="dashboardPage">
+        <div class="grid-4" style="margin-top: 8px; margin-bottom: 20px;">
+          <div class="card stat-card success-accent"><h3 id="dashStat1Label">Team Groups</h3><div class="value" id="teamGroupCount">0</div></div>
+          <div class="card stat-card warning-accent"><h3 id="dashStat2Label">Total Staff</h3><div class="value" id="teamMemberCount">0</div></div>
+          <div class="card stat-card danger-accent"><h3 id="dashStat3Label">Management Accounts</h3><div class="value" id="managementCount">0</div></div>
+          <div class="card stat-card success-accent"><h3 id="dashStat4Label">Client Accounts</h3><div class="value" id="dashboardClientCount">0</div></div>
+        </div>
+
+        <div id="dashboardBodyLayout" style="display:grid; grid-template-columns: 1fr; gap: 18px; align-items:start; overflow: visible; margin-top: 0;">
+          <section id="dashboardTeamSection" class="card panel" style="width: 520px; max-width: 100%; padding: 12px 14px; margin-left: -180px; margin-top: 0;">
+            <div class="panel-head" style="margin-bottom: 8px;"><div><h2 id="dashboardTeamTitle">Team Directory</h2><p class="section-note" id="dashboardTeamNote">View the people in each operational team before entering shipment operations.</p></div></div>
+            <div id="teamDirectoryGrid" style="display:grid; grid-template-columns: 1fr; gap: 10px; justify-items: start;"></div>
+          </section>
+          <div></div>
+        </div>
+      </section>
+
+      <section id="statsSection" class="grid-4 hidden" style="margin-top: 8px;">
+        <div class="card stat-card success-accent"><h3 id="stat1Label">Total Shipments</h3><div class="value" id="totalShipments">0</div></div>
+        <div class="card stat-card warning-accent"><h3 id="stat2Label">Items Requiring Action</h3><div class="value" id="actionRequired">0</div></div>
+        <div class="card stat-card danger-accent"><h3 id="stat3Label">Urgent Logistics Handover</h3><div class="value" id="urgentItems">0</div></div>
+        <div class="card stat-card success-accent"><h3 id="stat4Label">Delivered</h3><div class="value" id="deliveredItems">0</div></div>
+      </section>
+
+      <section id="operationsPage" class="layout hidden">
+        <div id="shipmentOverviewPanel" class="card panel">
+          <div class="panel-head"><div><h2 id="shipmentPanelTitle">Shipment Overview</h2><p class="section-note" id="shipmentPanelNote">Search cargo records, filter by phase, and review each shipment timeline.</p></div></div>
+          <div class="search-row">
+            <input id="searchInput" type="text" placeholder="Search by cargo ID, client, or destination" oninput="renderDashboard()" />
+            <select id="phaseFilter" onchange="renderDashboard()"></select>
+          </div>
+          <div id="cargoList" class="cargo-list"></div>
+        </div>
+
+        <div class="right-stack">
+          <div id="createOrderPanel" class="card panel hidden">
+            <div class="panel-head"><div><h2 id="createOrderTitle">Create New Order</h2><p class="section-note" id="createOrderNote">Order taking staff can create a new cargo record here before it moves to manufacturing.</p></div></div>
+            <div id="createOrderNotice" class="notice"></div>
+            <div id="createOrderGuard" class="panel-hidden-note hidden"></div>
+            <div class="form-grid">
+              <div class="form-group"><label for="newClient" id="labelNewClient">Client Name</label><input id="newClient" type="text" placeholder="e.g. MarineTech Engineering" /></div>
+              <div class="form-group"><label for="newOrigin" id="labelNewOrigin">Origin</label><input id="newOrigin" type="text" placeholder="e.g. Shenzhen, China" /></div>
+              <div class="form-group"><label for="newDestination" id="labelNewDestination">Destination</label><input id="newDestination" type="text" placeholder="e.g. Singapore" /></div>
+              <div class="form-group"><label for="newOwner" id="labelNewOwner">Initial Owner</label><select id="newOwner"></select></div>
+              <div class="form-group"><label for="newPhaseEta" id="labelNewPhaseEta">Inquiry / Order Intake ETA</label><input id="newPhaseEta" type="date" /></div>
+              <div class="form-group"><label for="newNextEta" id="labelNewNextEta">Next Step ETA</label><input id="newNextEta" type="date" /></div>
+              <div class="form-group"><label for="newNextStep" id="labelNewNextStep">Next Step</label><input id="newNextStep" type="text" placeholder="e.g. Confirm specifications with factory" /></div>
+              <div class="form-group"><label for="newPriority" id="labelNewPriority">Priority</label><select id="newPriority"></select></div>
+            </div>
+            <div class="form-group">
+              <label id="labelNewInCharge">Who is in charge</label>
+              <div id="newInChargeChecklist" class="permission-grid"></div>
+            </div>
+            <div class="form-group"><label for="newNotes" id="labelNewNotes">Order Notes</label><textarea id="newNotes" rows="4" placeholder="Example: Customer confirmed order. Waiting for drawing approval before manufacturing starts."></textarea></div>
+            <div class="user-actions"><button id="createOrderBtn" class="btn btn-primary" onclick="createOrder()">Create Order</button><button id="clearCreateOrderBtn" class="btn btn-secondary" onclick="clearCreateOrderForm()">Clear</button></div>
+            <div id="createOrderMessage" class="error success-text"></div>
+            <div class="footer-note" id="createOrderFooter"><strong>Order intake logic:</strong> new orders are created in the <strong>Inquiry</strong> stage first. After that, the assigned team can move them into Manufacturing.</div>
+          </div>
+
+          <div id="updatePanel" class="card panel">
+            <div class="panel-head"><div><h2 id="updateTitle">Update Shipment</h2><p class="section-note" id="updateNote">Use this form to change cargo phase, estimated dates, owner, and remarks.</p></div></div>
+            <div id="permissionNotice" class="notice"></div>
+            <div id="editGuardNotice" class="notice warning hidden"></div>
+            <div class="form-group"><label for="cargoSelect" id="labelCargoSelect">Select Cargo</label><select id="cargoSelect"></select></div>
+            <div class="form-grid">
+              <div class="form-group"><label for="currentPhase" id="labelCurrentPhase">Current Phase</label><select id="currentPhase"></select></div>
+              <div class="form-group"><label for="phaseEta" id="labelPhaseEta">Current Phase ETA</label><input id="phaseEta" type="date" /></div>
+              <div class="form-group"><label for="nextStep" id="labelNextStep">Next Step</label><input id="nextStep" type="text" placeholder="e.g. Arrange truck pickup" /></div>
+              <div class="form-group"><label for="nextEta" id="labelNextEta">Next Step ETA</label><input id="nextEta" type="date" /></div>
+              <div class="form-group"><label for="owner" id="labelOwner">Owner</label><select id="owner"></select></div>
+              <div class="form-group"><label for="priority" id="labelPriority">Priority</label><select id="priority"></select></div>
+            </div>
+            <div class="form-group"><label for="notes" id="labelNotes">Notes</label><textarea id="notes" rows="4" placeholder="Example: Manufacturing will finish next Wednesday. Logistics should prepare pickup on Monday."></textarea></div>
+            <button id="saveBtn" class="btn btn-primary btn-full" onclick="updateCargo()">Save Update</button>
+            <div id="saveMessage" class="error success-text"></div>
+            <div class="footer-note" id="updateFooter"><strong>Workflow control logic:</strong> only accounts with permission for the cargo's current workflow stage can amend it. Admin accounts have full access.</div>
+          </div>
+
+          </div>
+      </section>
+
+      <section id="completedPage" class="hidden">
+        <div class="card panel">
+          <div class="panel-head"><div><h2 id="completedPageTitle">Completed Tasks</h2><p class="section-note" id="completedPageNote">Archived completed shipments are grouped by year and kept for a minimum of 5 years.</p></div></div>
+          <div class="search-row">
+            <input id="completedSearchInput" type="text" placeholder="Search CL code" oninput="renderCompletedPage()" />
+            <select id="completedYearFilter" onchange="renderCompletedPage()">
+              <option value="all">All Years</option>
+            </select>
+          </div>
+          <div id="completedPageList"></div>
+        </div>
+      </section>
+
+      <section id="staffAccountPage" class="hidden">
+        <div class="right-stack">
+          <div id="adminPanel" class="card panel hidden">
+            <div class="panel-head"><div><h2 id="adminTitle">User & Permission Management</h2><p class="section-note" id="adminNote">Add users, remove users, and decide which workflow stages each account can amend.</p></div></div>
+            <div class="notice" id="adminExample"><strong>Example setup:</strong> A can handle Local Logistics (Warehouse → Port), B can handle Shipping, and C can handle Manufacturing. Admin can control all of this here.</div>
+            <div class="form-grid">
+              <div class="form-group"><label for="adminName" id="labelAdminName">Display Name</label><input id="adminName" type="text" placeholder="e.g. Tan Mei Ling" /></div>
+              <div class="form-group"><label for="adminUsername" id="labelAdminUsername">Username</label><input id="adminUsername" type="text" placeholder="e.g. mei.ling" /></div>
+              <div class="form-group"><label for="adminPassword" id="labelAdminPassword">Password</label><input id="adminPassword" type="text" placeholder="Enter password" /></div>
+              <div class="form-group"><label for="adminRole" id="labelAdminRole">Role</label><select id="adminRole" onchange="syncAdminRoleUI()"></select></div>
+            </div>
+            <div class="form-group"><label id="workflowPermissionsLabel">Workflow permissions</label><div id="permissionChecklist" class="permission-grid"></div></div>
+            <div class="user-actions" style="margin-top: 8px;"><button class="btn btn-primary" onclick="saveUser()" id="userSaveBtn">Add User</button><button id="clearFormBtn" class="btn btn-secondary" onclick="clearUserForm()">Clear Form</button></div>
+            <div id="userSaveMessage" class="error success-text"></div>
+            <div class="user-list" id="userList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="clientAccountPage" class="hidden">
+        <div class="right-stack">
+          <div id="clientAdminPanel" class="card panel hidden">
+            <div class="panel-head"><div><h2 id="clientAdminTitle">Client Account Permission</h2><p class="section-note" id="clientAdminNote">Create separate client login accounts and bind each account to selected cargo projects.</p></div></div>
+            <div class="notice" id="clientAdminExample"><strong>Example:</strong> a client account can be linked only to its own ongoing cargo projects, so the client portal shows only relevant shipment progress.</div>
+            <div class="form-grid">
+              <div class="form-group"><label for="clientAccountName" id="labelClientAccountName">Client Display Name</label><input id="clientAccountName" type="text" placeholder="e.g. Harbor Marine Supplies" /></div>
+              <div class="form-group"><label for="clientAccountUsername" id="labelClientAccountUsername">Client Username</label><input id="clientAccountUsername" type="text" placeholder="e.g. harbor.client" /></div>
+              <div class="form-group"><label for="clientAccountPassword" id="labelClientAccountPassword">Client Password</label><input id="clientAccountPassword" type="text" placeholder="Enter password" /></div>
+              <div class="form-group"><label for="clientAccountCompany" id="labelClientAccountCompany">Company / Client Name</label><input id="clientAccountCompany" type="text" placeholder="e.g. Harbor Marine Supplies" /></div>
+            </div>
+            <div class="form-group"><label id="bindProjectsLabel">Bind cargo projects</label><div id="clientBindList" class="bind-list"></div></div>
+            <div class="user-actions"><button id="clientSaveBtn" class="btn btn-primary" onclick="saveClientAccount()">Add Client Account</button><button id="clientClearBtn" class="btn btn-secondary" onclick="clearClientForm()">Clear Form</button></div>
+            <div id="clientSaveMessage" class="error success-text"></div>
+            <div class="user-list" id="clientAccountList"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="systemClock" class="system-clock hidden">
+      <div class="label" id="clockLabel">Current System Time (SGT)</div>
+      <div class="time" id="clockTime">--:--:--</div>
+      <div class="date" id="clockDate">--</div>
+    </div>
+  </div>
+
+  <div id="clientAppView" class="hidden">
+    <div class="container">
+      <header class="app-header">
+        <div class="header-left">
+          <div class="eyebrow" id="clientPortalEyebrow">Client Cargo Portal</div>
+          <h1 id="clientWelcomeText">Welcome</h1>
+          <p id="clientWelcomeSub">View the latest progress of your assigned cargo projects.</p>
+        </div>
+        <div class="header-actions">
+          <div class="header-controls-stack">
+            <button id="clientLanguageSwitch" class="language-switch" type="button" onclick="toggleLanguage()" aria-label="Language toggle">
+              <span id="clientLangLabelEn" class="language-label active">EN</span>
+              <span id="clientLangLabelZh" class="language-label">中文</span>
+              <span class="language-thumb"></span>
+            </button>
+            <button id="clientThemeSwitch" class="theme-switch light-active" type="button" onclick="toggleTheme()" aria-label="Theme toggle">
+              <span class="theme-label" id="clientThemeLight">☀</span>
+              <span class="theme-label" id="clientThemeDark">☾</span>
+              <span class="theme-thumb"></span>
+            </button>
+          </div>
+          <button id="clientLogoutBtn" class="btn btn-secondary" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <section id="clientStatsSection" class="grid-4" style="margin-top: 8px;">
+        <div class="card stat-card success-accent"><h3 id="clientStat1Label">Assigned Projects</h3><div class="value" id="clientTotalProjects">0</div></div>
+        <div class="card stat-card warning-accent"><h3 id="clientStat2Label">Active Projects</h3><div class="value" id="clientActiveProjects">0</div></div>
+        <div class="card stat-card danger-accent"><h3 id="clientStat3Label">Attention Needed</h3><div class="value" id="clientAttentionProjects">0</div></div>
+        <div class="card stat-card success-accent"><h3 id="clientStat4Label">Delivered</h3><div class="value" id="clientDeliveredProjects">0</div></div>
+      </section>
+
+      <section class="client-layout">
+        <div class="card panel">
+          <div class="panel-head"><div><h2 id="clientProjectTitle">Your Cargo Projects</h2><p class="section-note" id="clientProjectNote">This client portal only shows cargo projects bound to your client account.</p></div></div>
+          <div id="clientProjectList" class="client-project-grid"></div>
+        </div>
+      </section>
+    </div>
+    <div id="clientSystemClock" class="system-clock hidden">
+      <div class="label" id="clientClockLabel">Current System Time (SGT)</div>
+      <div class="time" id="clientClockTime">--:--:--</div>
+      <div class="date" id="clientClockDate">--</div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-overlay hidden" onclick="closeConfirmModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 id="confirmModalTitle">Confirm Changes</h3>
+      <p id="confirmModalMessage">Please confirm before proceeding.</p>
+      <div class="modal-actions">
+        <button id="confirmCancelBtn" class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+        <button id="confirmApproveBtn" class="btn btn-primary" onclick="confirmModalAction()">Confirm</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    const phaseOrder = ['Inquiry', 'Manufacturing', 'Ready for Pickup', 'In Transit', 'Customs Clearance', 'Delivered'];
+    const ownerOptions = ['China Operations', 'Singapore Office', 'Logistics Team', 'Customs Broker'];
+    const priorityOptions = ['Low', 'Medium', 'High', 'Urgent'];
+    const roleOptions = ['Admin', 'Singapore Office', 'China Operations', 'Logistics Team', 'Manufacturing Team', 'Customs Broker'];
+    const workflowOptions = [
+      { value: 'Inquiry', labelEn: 'Inquiry / Order Intake', labelZh: '询价 / 订单录入' },
+      { value: 'Manufacturing', labelEn: 'Manufacturing', labelZh: '生产中' },
+      { value: 'Ready for Pickup', labelEn: 'Local Logistics (Warehouse → Port)', labelZh: '本地物流（仓库 → 港口）' },
+      { value: 'In Transit', labelEn: 'Shipping / In Transit', labelZh: '海运 / 运输中' },
+      { value: 'Customs Clearance', labelEn: 'Customs Clearance', labelZh: '清关' },
+      { value: 'Delivered', labelEn: 'Final Delivery', labelZh: '最终交付' }
+    ];
+
+    const translations = {
+      en: {
+        brandCompany: 'COS', brandCompanySub: 'Cargo Operations System', brandEyebrow: 'Singapore Polytechnic FYP Prototype', brandTitle: 'COS Cargo Operations Portal',
+        brandIntro: 'A modern internal portal for COS teams to manage cargo updates, workflow ownership, and shipment visibility across offices and stakeholders.',
+        brandSummaryTitle: 'Built for faster cargo coordination', brandSummaryDesc: 'Designed for clearer handovers between order intake, operations, logistics, customs, and clients, with a cleaner interface for daily use.',
+        feature1Title: 'Login by stakeholder role', feature1Desc: 'Separate access for admin, staff, and clients through different login flows.',
+        feature2Title: 'Bell notification alerts', feature2Desc: 'Urgent cargo actions appear in a top-right notification bell with full details.',
+        feature3Title: 'Admin user control', feature3Desc: 'Add users, remove users, and assign which workflow stages each account can amend.',
+        feature4Title: 'Client project visibility', feature4Desc: 'Client accounts can be bound to selected cargo projects and only view their own cargo progress.',
+        demoFooter: 'Demo purpose only. This version uses browser storage and sample accounts for FYP presentation.',
+        staffTab: 'Staff Login', clientTab: 'Client Login', loginEyebrow: 'Sign in', loginTitleStaff: 'Welcome back', loginTitleClient: 'Client portal access',
+        loginSubtextStaff: 'Use one of the sample staff accounts below to test the OA workflow.', loginSubtextClient: 'Use a separate client login to view cargo progress only.',
+        usernameLabel: 'Username', usernamePlaceholder: 'Enter username', passwordLabel: 'Password', passwordPlaceholder: 'Enter password', loginBtn: 'Login',
+        invalidLoginStaff: 'Invalid login. Please use one of the sample staff accounts.', invalidLoginClient: 'Invalid client login. Please use a valid client account.',
+        demoAccountsStaff: '<strong>Sample staff accounts</strong><br>Admin: <strong>admin</strong> / <strong>admin123</strong><br>Singapore Management Account: <strong>sgmgmt</strong> / <strong>sg</strong><br>China Management Account: <strong>cnmgmt</strong> / <strong>cn</strong><br>SG Office Manager: <strong>sg.manager</strong> / <strong>password123</strong><br>China Operations: <strong>cn.ops</strong> / <strong>password123</strong><br>Logistics Team: <strong>logistics</strong> / <strong>password123</strong>',
+        demoAccountsClient: '<strong>Sample client account</strong><br>Client: <strong>harbor.client</strong> / <strong>client123</strong>',
+        dashboardEyebrow: 'Cargo Visibility Dashboard', clientPortalEyebrow: 'Client Cargo Portal', welcomePrefix: 'Welcome', welcomeSub: 'Track shipment phases, owners, dates, and alerts.',
+        clientWelcomeSub: 'View the latest progress of your assigned cargo projects.', notifications: 'Notifications', alertsTitle: 'Priority Alerts', resetCargo: 'Reset Cargo', resetUsers: 'Reset Users', logout: 'Logout',
+        stat1: 'Total Shipments', stat2: 'Items Requiring Action', stat3: 'Urgent Logistics Handover', stat4: 'Delivered',
+        shipmentPanelTitle: 'Shipment Overview', shipmentPanelNote: 'Search cargo records, filter by phase, and review each shipment timeline.', searchPlaceholder: 'Search by cargo ID, client, or destination', allPhases: 'All Phases',
+        createOrderTitle: 'Create New Order', createOrderNote: 'Order taking staff can create a new cargo record here before it moves to manufacturing.', createOrderBtn: 'Create Order', clearBtn: 'Clear',
+        createOrderFooter: '<strong>Order intake logic:</strong> new orders are created in the <strong>Inquiry</strong> stage first. After that, the assigned team can move them into Manufacturing.',
+        labelNewClient: 'Client Name', placeholderNewClient: 'e.g. MarineTech Engineering', labelNewOrigin: 'Origin', placeholderNewOrigin: 'e.g. Shenzhen, China', labelNewDestination: 'Destination', placeholderNewDestination: 'e.g. Singapore', labelNewOwner: 'Initial Owner',
+        labelNewPhaseEta: 'Inquiry / Order Intake ETA', labelNewNextEta: 'Next Step ETA', labelNewNextStep: 'Next Step', placeholderNewNextStep: 'e.g. Confirm specifications with factory', labelNewPriority: 'Priority', labelNewInCharge: 'Who is in charge', labelNewNotes: 'Order Notes', placeholderNewNotes: 'Example: Customer confirmed order. Waiting for drawing approval before manufacturing starts.',
+        updateTitle: 'Update Shipment', updateNote: 'Use this form to change cargo phase, estimated dates, owner, and remarks.', labelCargoSelect: 'Select Cargo', labelCurrentPhase: 'Current Phase', labelPhaseEta: 'Current Phase ETA', labelNextStep: 'Next Step', placeholderNextStep: 'e.g. Arrange truck pickup', labelNextEta: 'Next Step ETA', labelOwner: 'Owner', labelPriority: 'Priority', labelNotes: 'Notes', placeholderNotes: 'Example: Manufacturing will finish next Wednesday. Logistics should prepare pickup on Monday.', saveBtn: 'Save Update',
+        updateFooter: '<strong>Workflow control logic:</strong> only accounts with permission for the cargo\'s current workflow stage can amend it. Admin accounts have full access.',
+        adminTitle: 'User & Permission Management', adminNote: 'Add users, remove users, and decide which workflow stages each account can amend.', adminExample: '<strong>Example setup:</strong> A can handle Local Logistics (Warehouse → Port), B can handle Shipping, and C can handle Manufacturing. Admin can control all of this here.',
+        labelAdminName: 'Display Name', placeholderAdminName: 'e.g. Tan Mei Ling', labelAdminUsername: 'Username', placeholderAdminUsername: 'e.g. mei.ling', labelAdminPassword: 'Password', placeholderAdminPassword: 'Enter password', labelAdminRole: 'Role', workflowPermissions: 'Workflow permissions', addUser: 'Add User', saveUser: 'Save User', clearForm: 'Clear Form', edit: 'Edit', remove: 'Remove',
+        clientAdminTitle: 'Client Account Management', clientAdminNote: 'Create separate client login accounts and bind each account to selected cargo projects.', clientAdminExample: '<strong>Example:</strong> a client account can be linked only to its own ongoing cargo projects, so the client portal shows only relevant shipment progress.',
+        labelClientAccountName: 'Client Display Name', placeholderClientAccountName: 'e.g. Harbor Marine Supplies', labelClientAccountUsername: 'Client Username', placeholderClientAccountUsername: 'e.g. harbor.client', labelClientAccountPassword: 'Client Password', placeholderClientAccountPassword: 'Enter password', labelClientAccountCompany: 'Company / Client Name', placeholderClientAccountCompany: 'e.g. Harbor Marine Supplies', bindProjectsLabel: 'Bind cargo projects',
+        addClientAccount: 'Add Client Account', saveClientAccount: 'Save Client Account', clientRequired: 'Client name, username, password, and company are required.', clientExists: 'This client username already exists.', clientSaved: 'Client account saved successfully.', clientRemoved: 'Client account removed successfully.',
+        noShipmentRecords: 'No shipment records match your access, search, or filter.', noCargoAccess: 'No cargo available for your access', noEditableRecords: 'There are no records available for your account to amend.',
+        permissionNoticeAdmin: 'You are logged in as Admin. You can create orders, amend all workflow stages, manage user permissions, manage client accounts, and view all notifications.', permissionNoticeUserPrefix: 'You can amend cargos currently in these stages:', permissionNoticeUserSuffix: 'Only modules relevant to your work are shown.',
+        createOrderNoticeAdmin: 'As Admin, you can create new orders directly for any customer.', createOrderNoticeUser: 'Your account has Inquiry / Order Intake access, so you can create and amend orders in the inquiry stage.', createOrderNoPermission: 'You do not have permission to create a new order.', createOrderRequired: 'Please fill in all required order details.', createOrderSuccessPrefix: 'New order', createOrderSuccessSuffix: 'created successfully.',
+        noPermissionAmend: 'You do not have permission to amend this workflow stage.', shipmentUpdated: 'Shipment updated successfully.', userRequired: 'Display name and username are required.', userPasswordRequired: 'Password is required for a new user.', userPermissionRequired: 'Select at least one workflow permission for this user.', userExists: 'This username already exists.', userNotFound: 'User could not be found.', userSaved: 'User saved successfully.', userRemoved: 'User removed successfully.', mainAdminCannotRemove: 'The main admin account cannot be removed.', currentAccountCannotRemove: 'You cannot remove the account currently in use.',
+        fullAccess: 'Full access', editableByYou: 'Editable by you', viewOnly: 'View only', lastUpdated: 'Last updated', currentPhaseEta: 'Current phase ETA', nextStepEta: 'Next step ETA', nextStepLabel: 'Next step', systemStatus: 'System status', notesLabel: 'Notes',
+        urgentFollowUp: 'Urgent follow-up needed', actionSoon: 'Action needed soon', onTrack: 'On track', days: 'days', currentPhaseLabel: 'Current phase', ownerLabel: 'Owner', etaLabel: 'ETA', priorityLabel: 'Priority', reasonLabel: 'Reason',
+        alertsNoneTitle: 'No notifications for your workflow', alertsNoneText: 'You will only see alerts for your assigned stages and the immediate handover stage.', adminVisibility: 'Admin visibility', assignedWorkflowStage: 'Assigned workflow stage', nextHandoverAfter: 'Next handover after', relevantWorkflowUpdate: 'Relevant workflow update', defaultCreateOrderNextStep: 'Confirm specifications with factory',
+        clientStat1: 'Assigned Projects', clientStat2: 'Active Projects', clientStat3: 'Attention Needed', clientStat4: 'Delivered', clientProjectTitle: 'Your Cargo Projects', clientProjectNote: 'This client portal only shows cargo projects bound to your client account.', noClientProjects: 'No cargo projects are currently bound to this client account.', clockLabel: 'Current System Time (SGT)',
+        timestampLabel: 'Timestamp', createdByLabel: 'Updated by', projectBindingNone: 'No cargo projects available to bind.', bindCountPrefix: 'Bound projects',
+        boundProjectNotice: 'Bound client projects only', clientProjectVisible: 'Visible in client portal'
+      },
+      zh: {
+        brandCompany: 'COS', brandCompanySub: '货物营运系统', brandEyebrow: '新加坡理工学院毕业设计原型', brandTitle: 'COS 货物营运门户', brandIntro: '这是一个为 COS 团队打造的现代内部系统，用于管理货物更新、流程负责人以及跨办公室和相关方的可视化进度。', brandSummaryTitle: '为更高效的货物协作而设计', brandSummaryDesc: '此界面用于让订单录入、营运、物流、清关与客户之间的交接更清晰，整体页面也更简洁现代。',
+        feature1Title: '按角色登录', feature1Desc: '管理员、内部员工与客户使用不同的登录流程。', feature2Title: '铃铛通知提醒', feature2Desc: '紧急货物事项会显示在右上角铃铛通知中，并附上完整资料。', feature3Title: '管理员用户控制', feature3Desc: '可新增用户、删除用户，并分配每个账号可修改的流程阶段。', feature4Title: '客户项目可视化', feature4Desc: '客户账号可绑定指定货物项目，并且只能查看自己的货物进度。',
+        demoFooter: '仅供演示使用。本版本使用浏览器储存与示范账号，适合毕业设计展示。', staffTab: '员工登录', clientTab: '客户登录', loginEyebrow: '登录', loginTitleStaff: '欢迎回来', loginTitleClient: '客户门户登录', loginSubtextStaff: '请使用以下示范员工账号测试 OA 工作流程。', loginSubtextClient: '请使用独立客户账号，仅查看货物进度。',
+        usernameLabel: '用户名', usernamePlaceholder: '请输入用户名', passwordLabel: '密码', passwordPlaceholder: '请输入密码', loginBtn: '登录', invalidLoginStaff: '登录信息无效，请使用示范员工账号。', invalidLoginClient: '客户登录无效，请使用正确的客户账号。',
+        demoAccountsStaff: '<strong>示范员工账号</strong><br>管理员：<strong>admin</strong> / <strong>admin123</strong><br>新加坡管理账号：<strong>sgmgmt</strong> / <strong>sg</strong><br>中国管理账号：<strong>cnmgmt</strong> / <strong>cn</strong><br>新加坡办公室经理：<strong>sg.manager</strong> / <strong>password123</strong><br>中国营运团队：<strong>cn.ops</strong> / <strong>password123</strong><br>物流团队：<strong>logistics</strong> / <strong>password123</strong>',
+        demoAccountsClient: '<strong>示范客户账号</strong><br>客户：<strong>harbor.client</strong> / <strong>client123</strong>',
+        dashboardEyebrow: '货物可视化仪表板', clientPortalEyebrow: '客户货物门户', welcomePrefix: '欢迎', welcomeSub: '追踪货物阶段、负责人、日期与提醒。', clientWelcomeSub: '查看你已绑定货物项目的最新进度。', notifications: '通知', alertsTitle: '优先提醒', resetCargo: '重置货物资料', resetUsers: '重置用户资料', logout: '登出',
+        stat1: '货物总数', stat2: '需要处理的项目', stat3: '紧急物流交接', stat4: '已交付', shipmentPanelTitle: '货物总览', shipmentPanelNote: '搜索货物记录、按阶段筛选，并查看每票货物的流程时间线。', searchPlaceholder: '按货号、客户或目的地搜索', allPhases: '全部阶段',
+        createOrderTitle: '新增订单', createOrderNote: '订单处理人员可在此新增货物记录，之后再交由生产团队处理。', createOrderBtn: '新增订单', clearBtn: '清空', createOrderFooter: '<strong>订单录入逻辑：</strong>新订单会先进入<strong>询价</strong>阶段，之后由相关团队推进到<strong>生产中</strong>。',
+        labelNewClient: '客户名称', placeholderNewClient: '例如：MarineTech Engineering', labelNewOrigin: '起运地', placeholderNewOrigin: '例如：深圳，中国', labelNewDestination: '目的地', placeholderNewDestination: '例如：新加坡', labelNewOwner: '初始负责人', labelNewPhaseEta: '询价 / 订单录入预计日期', labelNewNextEta: '下一步预计日期', labelNewNextStep: '下一步', placeholderNewNextStep: '例如：与工厂确认规格', labelNewPriority: '优先级', labelNewInCharge: '负责团队', labelNewNotes: '订单备注', placeholderNewNotes: '例如：客户已确认订单，待图纸批准后进入生产。',
+        updateTitle: '更新货物', updateNote: '使用此表单更新货物阶段、预计日期、负责人和备注。', labelCargoSelect: '选择货物', labelCurrentPhase: '当前阶段', labelPhaseEta: '当前阶段预计日期', labelNextStep: '下一步', placeholderNextStep: '例如：安排卡车提货', labelNextEta: '下一步预计日期', labelOwner: '负责人', labelPriority: '优先级', labelNotes: '备注', placeholderNotes: '例如：生产将于下周三完成，物流需在周一安排提货。', saveBtn: '保存更新',
+        updateFooter: '<strong>流程权限逻辑：</strong>只有拥有当前流程阶段权限的账号才能修改资料。管理员拥有全部权限。',
+        adminTitle: '用户与权限管理', adminNote: '新增用户、删除用户，并决定每个账号可修改哪些流程阶段。', adminExample: '<strong>设置示例：</strong>A 负责本地物流（仓库 → 港口），B 负责海运，C 负责生产。管理员可在此统一控制。', labelAdminName: '显示名称', placeholderAdminName: '例如：陈美玲', labelAdminUsername: '用户名', placeholderAdminUsername: '例如：mei.ling', labelAdminPassword: '密码', placeholderAdminPassword: '请输入密码', labelAdminRole: '角色', workflowPermissions: '流程权限', addUser: '新增用户', saveUser: '保存用户', clearForm: '清空表单', edit: '编辑', remove: '删除',
+        clientAdminTitle: '客户账号管理', clientAdminNote: '创建独立客户登录账号，并将每个账号绑定到指定货物项目。', clientAdminExample: '<strong>示例：</strong>一个客户账号只能绑定自己的在途货物项目，因此客户门户只会显示相关的货物进度。', labelClientAccountName: '客户显示名称', placeholderClientAccountName: '例如：Harbor Marine Supplies', labelClientAccountUsername: '客户用户名', placeholderClientAccountUsername: '例如：harbor.client', labelClientAccountPassword: '客户密码', placeholderClientAccountPassword: '请输入密码', labelClientAccountCompany: '公司 / 客户名称', placeholderClientAccountCompany: '例如：Harbor Marine Supplies', bindProjectsLabel: '绑定货物项目', addClientAccount: '新增客户账号', saveClientAccount: '保存客户账号', clientRequired: '客户名称、用户名、密码和公司名称均为必填。', clientExists: '这个客户用户名已存在。', clientSaved: '客户账号保存成功。', clientRemoved: '客户账号删除成功。',
+        noShipmentRecords: '没有符合你的权限、搜索条件或筛选条件的货物记录。', noCargoAccess: '没有你可操作的货物记录', noEditableRecords: '当前没有你账号可修改的记录。', permissionNoticeAdmin: '你当前以管理员身份登录。你可以新增订单、修改所有流程阶段、管理用户权限、管理客户账号，并查看所有通知。', permissionNoticeUserPrefix: '你目前可以修改以下阶段的货物：', permissionNoticeUserSuffix: '系统只会显示与你工作相关的模块。', createOrderNoticeAdmin: '你当前是管理员，可直接为任何客户新增订单。', createOrderNoticeUser: '你的账号拥有询价 / 订单录入权限，因此可新增订单并修改询价阶段记录。', createOrderNoPermission: '你没有新增订单的权限。', createOrderRequired: '请填写所有必填的订单资料。', createOrderSuccessPrefix: '新订单', createOrderSuccessSuffix: '已成功创建。',
+        noPermissionAmend: '你没有权限修改这个流程阶段。', shipmentUpdated: '货物更新成功。', userRequired: '显示名称和用户名为必填项。', userPasswordRequired: '新增用户时必须设置密码。', userPermissionRequired: '请至少为该用户选择一个流程权限。', userExists: '这个用户名已存在。', userNotFound: '找不到该用户。', userSaved: '用户保存成功。', userRemoved: '用户删除成功。', mainAdminCannotRemove: '主管理员账号不能被删除。', currentAccountCannotRemove: '不能删除当前正在使用的账号。',
+        fullAccess: '全部权限', editableByYou: '你可编辑', viewOnly: '仅查看', lastUpdated: '最后更新', currentPhaseEta: '当前阶段预计日期', nextStepEta: '下一步预计日期', nextStepLabel: '下一步', systemStatus: '系统状态', notesLabel: '备注', urgentFollowUp: '需要紧急跟进', actionSoon: '即将需要处理', onTrack: '进度正常', days: '天', currentPhaseLabel: '当前阶段', ownerLabel: '负责人', etaLabel: '预计日期', priorityLabel: '优先级', reasonLabel: '原因', alertsNoneTitle: '目前没有与你流程相关的通知', alertsNoneText: '你只会看到自己负责阶段以及下一交接阶段的提醒。', adminVisibility: '管理员可见', assignedWorkflowStage: '你负责的流程阶段', nextHandoverAfter: '下一交接阶段，前一阶段为', relevantWorkflowUpdate: '相关流程更新', defaultCreateOrderNextStep: '与工厂确认规格',
+        clientStat1: '已绑定项目', clientStat2: '进行中项目', clientStat3: '需留意项目', clientStat4: '已交付', clientProjectTitle: '你的货物项目', clientProjectNote: '此客户门户只会显示绑定到你账号的货物项目。', noClientProjects: '当前没有绑定到此客户账号的货物项目。', clockLabel: '当前系统时间（SGT）', timestampLabel: '时间戳', createdByLabel: '更新人', projectBindingNone: '目前没有可绑定的货物项目。', bindCountPrefix: '已绑定项目', boundProjectNotice: '仅显示已绑定客户项目', clientProjectVisible: '显示于客户门户'
+      }
+    };
+
+    const defaultUsers = [
+      { username: 'admin', password: 'admin123', name: 'System Admin', role: 'Admin', permissions: ['*'] },
+      { username: 'sgmgmt', password: 'sg', name: 'Singapore Management Account', role: 'Singapore Office', permissions: ['Inquiry', 'Manufacturing', 'Ready for Pickup', 'In Transit', 'Customs Clearance', 'Delivered'] },
+      { username: 'cnmgmt', password: 'cn', name: 'China Management Account', role: 'China Operations', permissions: ['Inquiry', 'Manufacturing', 'Ready for Pickup', 'In Transit', 'Customs Clearance', 'Delivered'] },
+      { username: 'sg.manager', password: 'password123', name: 'Amanda Tan', role: 'Singapore Office', permissions: ['Ready for Pickup', 'Customs Clearance', 'Delivered'] },
+      { username: 'cn.ops', password: 'password123', name: 'Li Wei', role: 'China Operations', permissions: ['Inquiry', 'Manufacturing'] },
+      { username: 'logistics', password: 'password123', name: 'Daniel Goh', role: 'Logistics Team', permissions: ['Ready for Pickup', 'In Transit', 'Customs Clearance'] }
+    ];
+
+    const RETENTION_YEARS = 5;
+
+    const defaultClients = [
+      { username: 'harbor.client', password: 'client123', name: 'Harbor Client', company: 'Harbor Marine Supplies', boundProjects: ['CL-2026-001'], lastUpdatedAt: '', lastUpdatedBy: 'System Demo' }
+    ];
+
+    let currentUser = null;
+    let currentClient = null;
+    let currentLanguage = 'en';
+    let editingUser = null;
+    let editingClient = null;
+    let loginMode = 'staff';
+    let pendingConfirmAction = null;
+    let currentTheme = localStorage.getItem('oaTheme') || 'light';
+
+    function tr(key) { return translations[currentLanguage]?.[key] ?? key; }
+
+    function roleLabel(role) {
+      const map = {
+        'Admin': { en: 'Admin', zh: '管理员' },
+        'Singapore Office': { en: 'Singapore Office', zh: '新加坡办公室' },
+        'China Operations': { en: 'China Operations', zh: '中国营运团队' },
+        'Logistics Team': { en: 'Logistics Team', zh: '物流团队' },
+        'Manufacturing Team': { en: 'Manufacturing Team', zh: '生产团队' },
+        'Customs Broker': { en: 'Customs Broker', zh: '报关行' }
+      };
+      return map[role]?.[currentLanguage] || role;
+    }
+    function ownerLabel(owner) { return roleLabel(owner); }
+    function priorityLabel(priority) {
+      const map = { 'Low': { en: 'Low', zh: '低' }, 'Medium': { en: 'Medium', zh: '中' }, 'High': { en: 'High', zh: '高' }, 'Urgent': { en: 'Urgent', zh: '紧急' } };
+      return map[priority]?.[currentLanguage] || priority;
+    }
+    function phaseLabel(phase) {
+      const map = {
+        'Inquiry': { en: 'Inquiry', zh: '询价' }, 'Manufacturing': { en: 'Manufacturing', zh: '生产中' }, 'Ready for Pickup': { en: 'Ready for Pickup', zh: '待提货' },
+        'In Transit': { en: 'In Transit', zh: '运输中' }, 'Customs Clearance': { en: 'Customs Clearance', zh: '清关中' }, 'Delivered': { en: 'Delivered', zh: '已交付' }
+      };
+      return map[phase]?.[currentLanguage] || phase;
+    }
+    function workflowLabel(value) {
+      const found = workflowOptions.find(item => item.value === value);
+      return found ? (currentLanguage === 'zh' ? found.labelZh : found.labelEn) : value;
+    }
+
+    function getSGTNow() {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Singapore', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      }).formatToParts(new Date()).reduce((acc, part) => { acc[part.type] = part.value; return acc; }, {});
+      return {
+        isoDate: `${parts.year}-${parts.month}-${parts.day}`,
+        timestamp: `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second} SGT`,
+        time: `${parts.hour}:${parts.minute}:${parts.second}`,
+        date: `${parts.year}-${parts.month}-${parts.day}`
+      };
+    }
+    function todayISO() { return getSGTNow().isoDate; }
+    function nowTimestamp() { return getSGTNow().timestamp; }
+    function addDays(days) {
+      const base = new Date(`${todayISO()}T00:00:00`);
+      base.setDate(base.getDate() + days);
+      const y = base.getFullYear();
+      const m = String(base.getMonth() + 1).padStart(2, '0');
+      const d = String(base.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getStoredCargo() { const saved = localStorage.getItem('cargoData'); return saved ? JSON.parse(saved) : null; }
+    function setStoredCargo(data) { localStorage.setItem('cargoData', JSON.stringify(data)); }
+    function getStoredUsers() { const saved = localStorage.getItem('oaUsers'); return saved ? JSON.parse(saved) : null; }
+    function setStoredUsers(data) { localStorage.setItem('oaUsers', JSON.stringify(data)); }
+    function getStoredClients() { const saved = localStorage.getItem('oaClients'); return saved ? JSON.parse(saved) : null; }
+    function setStoredClients(data) { localStorage.setItem('oaClients', JSON.stringify(data)); }
+
+    function seedUsers(forceReset = false) {
+      const existingUsers = getStoredUsers() || [];
+      const existingClients = getStoredClients() || [];
+
+      if (!existingUsers.length || forceReset) {
+        setStoredUsers(defaultUsers);
+      } else {
+        const mergedUsers = [...existingUsers];
+        defaultUsers.forEach(defaultUser => {
+          if (!mergedUsers.some(user => user.username === defaultUser.username)) {
+            mergedUsers.push(defaultUser);
+          }
+        });
+        setStoredUsers(mergedUsers);
+      }
+
+      if (!existingClients.length || forceReset) {
+        const seededClients = defaultClients.map(client => ({ ...client, lastUpdatedAt: nowTimestamp() }));
+        setStoredClients(seededClients);
+      } else {
+        const mergedClients = [...existingClients];
+        defaultClients.forEach(defaultClient => {
+          if (!mergedClients.some(client => client.username === defaultClient.username)) {
+            mergedClients.push({ ...defaultClient, lastUpdatedAt: nowTimestamp() });
+          }
+        });
+        setStoredClients(mergedClients);
+      }
+
+      if (currentUser) {
+        const refreshedUsers = getStoredUsers() || [];
+        currentUser = refreshedUsers.find(u => u.username === currentUser.username) || refreshedUsers[0] || null;
+        renderAdminPanel(); refreshPermissionNotice(); refreshAccessControls();
+      }
+      if (currentClient) {
+        const refreshedClients = getStoredClients() || [];
+        currentClient = refreshedClients.find(c => c.username === currentClient.username) || null;
+        renderClientPortal();
+      }
+    }
+
+    function seedDemoData() {
+      const stamp = nowTimestamp();
+      const demoData = [
+        { id: 'CL-2026-001', client: 'Harbor Marine Supplies', origin: 'Shenzhen, China', destination: 'Singapore', phase: 'Manufacturing', phaseEta: addDays(6), nextStep: 'Arrange truck pickup from factory', nextEta: addDays(4), owner: 'China Operations', priority: 'Urgent', notes: 'Production expected to complete next Wednesday. Logistics should prepare pickup by Monday.', updatedBy: 'System Demo', lastUpdated: todayISO(), lastUpdatedAt: stamp },
+        { id: 'CL-2026-002', client: 'BlueWave Offshore', origin: 'Ningbo, China', destination: 'Jurong Port, Singapore', phase: 'Ready for Pickup', phaseEta: addDays(1), nextStep: 'Book export haulage and vessel space', nextEta: addDays(2), owner: 'Logistics Team', priority: 'High', notes: 'Cargo packed and labelled. Awaiting truck confirmation.', updatedBy: 'System Demo', lastUpdated: todayISO(), lastUpdatedAt: stamp },
+        { id: 'CL-2026-003', client: 'Pacific Engine Parts', origin: 'Shanghai, China', destination: 'Tuas, Singapore', phase: 'In Transit', phaseEta: addDays(5), nextStep: 'Prepare import customs documentation', nextEta: addDays(4), owner: 'Singapore Office', priority: 'Medium', notes: 'Vessel departed. ETA Singapore remains on schedule.', updatedBy: 'System Demo', lastUpdated: todayISO(), lastUpdatedAt: stamp },
+        { id: 'CL-2026-004', client: 'Oceanic Repair Hub', origin: 'Guangzhou, China', destination: 'Singapore', phase: 'Customs Clearance', phaseEta: addDays(2), nextStep: 'Final delivery to warehouse', nextEta: addDays(3), owner: 'Customs Broker', priority: 'High', notes: 'Awaiting declaration release and permit confirmation.', updatedBy: 'System Demo', lastUpdated: todayISO(), lastUpdatedAt: stamp },
+        { id: 'CL-2026-005', client: 'Anchor Industrial', origin: 'Qingdao, China', destination: 'Singapore', phase: 'Delivered', phaseEta: todayISO(), nextStep: 'Completed', nextEta: todayISO(), owner: 'Singapore Office', priority: 'Low', notes: 'Delivered successfully to customer site.', updatedBy: 'System Demo', lastUpdated: todayISO(), lastUpdatedAt: stamp }
+      ];
+      setStoredCargo(demoData);
+      if (currentUser) { populateCargoSelect(); renderDashboard(); renderClientBindList(); renderInChargeChecklist(getCheckedInCharge()); }
+      if (currentClient) renderClientPortal();
+    }
+
+    seedUsers();
+    if (!getStoredCargo()) seedDemoData();
+
+    function setText(idOrEl, text) {
+      const el = typeof idOrEl === 'string' ? document.querySelector(idOrEl) : idOrEl;
+      if (el) el.textContent = text;
+    }
+    function setHTML(idOrEl, html) {
+      const el = typeof idOrEl === 'string' ? document.querySelector(idOrEl) : idOrEl;
+      if (el) el.innerHTML = html;
+    }
+    function setPlaceholder(idOrEl, text) {
+      const el = typeof idOrEl === 'string' ? document.querySelector(idOrEl) : idOrEl;
+      if (el) el.placeholder = text;
+    }
+
+    function renderSelectOptions(selectId, values, labelFn, extraOption = null) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      const currentValue = select.value;
+      const options = [];
+      if (extraOption) options.push(`<option value="${extraOption.value}">${extraOption.label}</option>`);
+      values.forEach(value => options.push(`<option value="${value}">${labelFn(value)}</option>`));
+      select.innerHTML = options.join('');
+      if ([...select.options].some(option => option.value === currentValue)) select.value = currentValue;
+    }
+
+    function renderPhaseFilterOptions() { renderSelectOptions('phaseFilter', phaseOrder, phaseLabel, { value: 'all', label: tr('allPhases') }); }
+    function renderPhaseStageOptions() { renderSelectOptions('currentPhase', phaseOrder, phaseLabel); }
+    function renderOwnerOptions() { ['newOwner', 'owner'].forEach(id => renderSelectOptions(id, ownerOptions, ownerLabel)); }
+    function renderPriorityOptions() { ['newPriority', 'priority'].forEach(id => renderSelectOptions(id, priorityOptions, priorityLabel)); }
+    function renderInChargeChecklist(selected = []) {
+      const wrap = document.getElementById('newInChargeChecklist');
+      if (!wrap) return;
+      wrap.innerHTML = ownerOptions.map(option => `
+        <label class="permission-item">
+          <input type="checkbox" class="incharge-check" value="${option}" ${selected.includes(option) ? 'checked' : ''} />
+          <div><div><strong>${ownerLabel(option)}</strong></div><div class="small">${option}</div></div>
+        </label>
+      `).join('');
+    }
+    function getCheckedInCharge() { return [...document.querySelectorAll('.incharge-check:checked')].map(cb => cb.value); }
+    function renderRoleOptions() { renderSelectOptions('adminRole', roleOptions, roleLabel); }
+    function toggleLanguage() { setLanguage(currentLanguage === 'en' ? 'zh' : 'en'); }
+
+    function applyTheme() {
+      document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+      document.querySelectorAll('.theme-switch').forEach(el => {
+        el.classList.toggle('dark', currentTheme === 'dark');
+        el.classList.toggle('light-active', currentTheme !== 'dark');
+      });
+    }
+    function setTheme(theme) {
+      currentTheme = theme;
+      localStorage.setItem('oaTheme', theme);
+      applyTheme();
+    }
+    function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+    function setLoginMode(mode) {
+      loginMode = mode;
+      document.getElementById('staffTab').classList.toggle('active', mode === 'staff');
+      document.getElementById('clientTab').classList.toggle('active', mode === 'client');
+      applyLanguage();
+      document.getElementById('loginError').textContent = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorBox = document.getElementById('loginError');
+
+      if (loginMode === 'client') {
+        const clients = getStoredClients() || [];
+        const foundClient = clients.find(c => c.username === username && c.password === password);
+        if (!foundClient) { errorBox.textContent = tr('invalidLoginClient'); return; }
+        currentClient = foundClient; currentUser = null; editingUser = null; editingClient = null; errorBox.textContent = '';
+        document.getElementById('loginView').classList.add('hidden');
+        document.getElementById('appView').classList.add('hidden');
+        document.getElementById('clientAppView').classList.remove('hidden');
+        applyLanguage(); startClock(); renderClientPortal(); return;
+      }
+
+      const users = getStoredUsers() || [];
+      const found = users.find(u => u.username === username && u.password === password);
+      if (!found) { errorBox.textContent = tr('invalidLoginStaff'); return; }
+      currentUser = found; currentClient = null; errorBox.textContent = '';
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('clientAppView').classList.add('hidden');
+      document.getElementById('appView').classList.remove('hidden');
+      applyLanguage(); renderPermissionChecklist(); renderAdminPanel(); refreshPermissionNotice(); refreshAccessControls(); clearCreateOrderForm(); populateCargoSelect(); renderDashboard(); renderTeamDashboard(); showAdminSection('staff'); showStaffPage('dashboard'); startClock();
+    }
+
+    function logout() {
+      currentUser = null; currentClient = null; editingUser = null; editingClient = null;
+      document.getElementById('appView').classList.add('hidden');
+      document.getElementById('clientAppView').classList.add('hidden');
+      document.getElementById('loginView').classList.remove('hidden');
+      document.getElementById('username').value = ''; document.getElementById('password').value = '';
+      document.getElementById('loginError').textContent = ''; document.getElementById('saveMessage').textContent = '';
+      document.getElementById('alertsDropdown').classList.add('hidden');
+      document.getElementById('systemClock').classList.add('hidden'); document.getElementById('clientSystemClock').classList.add('hidden');
+      applyLanguage();
+    }
+
+    function isAdmin(user = currentUser) { return !!user && (user.role === 'Admin' || (user.permissions || []).includes('*')); }
+    function isSingaporeManagement(user = currentUser) { return !!user && user.username === 'sgmgmt'; }
+    function isChinaManagement(user = currentUser) { return !!user && user.username === 'cnmgmt'; }
+    function canManageAccounts(user = currentUser) { return isAdmin(user) || isSingaporeManagement(user) || isChinaManagement(user); }
+    function canManageClientAccounts(user = currentUser) { return isAdmin(user); }
+    function managedRoleByUser(user = currentUser) {
+      if (isSingaporeManagement(user)) return 'Singapore Office';
+      if (isChinaManagement(user)) return 'China Operations';
+      return null;
+    }
+    function canManageStaffUser(targetUser, manager = currentUser) {
+      if (!targetUser || !manager) return false;
+      if (isAdmin(manager)) return true;
+      const managedRole = managedRoleByUser(manager);
+      return !!managedRole && targetUser.role === managedRole;
+    }
+    function permissionDisplayList(user = currentUser) { if (!user) return []; if (isAdmin(user)) return [tr('fullAccess')]; return (user.permissions || []).map(workflowLabel); }
+
+    function refreshPermissionNotice() {
+      if (!currentUser) return;
+      const text = isAdmin() ? tr('permissionNoticeAdmin') : `${tr('permissionNoticeUserPrefix')} ${permissionDisplayList().join('、')}。${tr('permissionNoticeUserSuffix')}`;
+      document.getElementById('permissionNotice').textContent = text;
+      refreshCreateOrderPanel();
+    }
+
+    function hasShipmentOverviewAccess(user = currentUser) { if (!user) return false; if (isAdmin(user)) return true; return (user.permissions || []).some(phase => phase !== 'Inquiry'); }
+    function canEditCargoForUser(item, user = currentUser) { if (!user) return false; if (isAdmin(user)) return true; return (user.permissions || []).includes(item.phase); }
+    function canViewCargoInOverview(item, user = currentUser) { if (isAdmin(user)) return true; if (!hasShipmentOverviewAccess(user)) return false; return (user.permissions || []).includes(item.phase); }
+
+    function refreshAccessControls() {
+      const showOverview = hasShipmentOverviewAccess();
+      const showAdminControls = canManageAccounts();
+      document.getElementById('statsSection').classList.toggle('hidden', !showOverview);
+      document.getElementById('shipmentOverviewPanel').classList.toggle('hidden', !showOverview);
+      document.getElementById('bellWrap').classList.toggle('hidden', !showOverview && currentStaffPage !== 'completed');
+      document.getElementById('resetWrap').classList.toggle('hidden', !isAdmin());
+      document.getElementById('operationsNavBtn').classList.toggle('hidden', false);
+      
+      document.getElementById('accountMgmtWrap').classList.toggle('hidden', !showAdminControls);
+      document.getElementById('staffAccountMenuBtn').classList.toggle('hidden', !showAdminControls);
+      document.getElementById('clientAccountMenuBtn').classList.toggle('hidden', !canManageClientAccounts());
+      document.getElementById('adminPanel').classList.toggle('hidden', !showAdminControls || currentAdminSection !== 'staff');
+      document.getElementById('clientAdminPanel').classList.toggle('hidden', !canManageClientAccounts() || currentAdminSection !== 'client');
+      if (!showAdminControls && (currentStaffPage === 'admin' || currentStaffPage === 'staffAccount' || currentStaffPage === 'clientAccount')) currentStaffPage = 'operations';
+      showStaffPage(currentStaffPage, true);
+    }
+
+    let currentStaffPage = 'operations';
+    let currentAdminSection = 'staff';
+
+    function showStaffPage(page, skipRefresh = false) {
+      currentStaffPage = page;
+      const allowStaffAccount = canManageAccounts();
+      const allowClientAccount = canManageClientAccounts();
+      let targetPage = page;
+
+      if (page === 'staffAccount' && !allowStaffAccount) targetPage = 'operations';
+      if (page === 'clientAccount' && !allowClientAccount) targetPage = 'operations';
+      if (page === 'admin') targetPage = 'operations';
+
+      document.getElementById('dashboardPage').classList.toggle('hidden', targetPage !== 'dashboard');
+      document.getElementById('operationsPage').classList.toggle('hidden', targetPage !== 'operations');
+      document.getElementById('completedPage').classList.toggle('hidden', targetPage !== 'completed');
+      document.getElementById('staffAccountPage').classList.toggle('hidden', targetPage !== 'staffAccount');
+      document.getElementById('clientAccountPage').classList.toggle('hidden', targetPage !== 'clientAccount');
+      document.getElementById('statsSection').classList.toggle('hidden', targetPage !== 'operations' || !hasShipmentOverviewAccess());
+      document.getElementById('dashboardNavBtn').classList.toggle('active', targetPage === 'dashboard');
+      document.getElementById('operationsNavBtn').classList.toggle('active', targetPage === 'operations' || targetPage === 'completed');
+      document.getElementById('accountMgmtBtn').classList.toggle('active', targetPage === 'staffAccount' || targetPage === 'clientAccount');
+      document.getElementById('bellWrap').classList.toggle('hidden', targetPage === 'staffAccount' || targetPage === 'clientAccount' || targetPage === 'dashboard');
+
+      if (!skipRefresh) {
+        if (targetPage === 'dashboard') renderTeamDashboard();
+        if (targetPage === 'operations') renderDashboard();
+        if (targetPage === 'completed') renderCompletedPage();
+        if (targetPage === 'staffAccount' || targetPage === 'clientAccount') renderAdminPanel();
+      }
+    }
+
+    function showAdminSection(section) {
+      if (section === 'client' && !canManageClientAccounts()) return;
+      currentAdminSection = section;
+      document.getElementById('accountMgmtDropdown').classList.add('hidden');
+      showStaffPage(section === 'staff' ? 'staffAccount' : 'clientAccount');
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      applyLanguage();
+      if (currentUser) {
+        renderPermissionChecklist(editingUser ? (getStoredUsers() || []).find(u => u.username === editingUser)?.permissions?.filter(p => p !== '*') || [] : []);
+        refreshPermissionNotice(); refreshAccessControls(); populateCargoSelect(); renderDashboard(); renderTeamDashboard(); renderAdminPanel();
+      }
+      if (currentClient) renderClientPortal();
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = currentLanguage === 'zh' ? 'zh-CN' : 'en';
+      document.querySelectorAll('.language-switch').forEach(el => el.classList.toggle('zh', currentLanguage === 'zh'));
+      ['langLabelEn','loginLangLabelEn','clientLangLabelEn'].forEach(id => document.getElementById(id)?.classList.toggle('active', currentLanguage === 'en'));
+      ['langLabelZh','loginLangLabelZh','clientLangLabelZh'].forEach(id => document.getElementById(id)?.classList.toggle('active', currentLanguage === 'zh'));
+
+      setText('#brandCompany', tr('brandCompany')); setText('#brandCompanySub', tr('brandCompanySub')); setText('#brandEyebrow', tr('brandEyebrow')); setText('#brandTitle', tr('brandTitle')); setText('#brandIntro', tr('brandIntro')); setText('#brandSummaryTitle', tr('brandSummaryTitle')); setText('#brandSummaryDesc', tr('brandSummaryDesc')); setText('#demoFooter', tr('demoFooter'));
+      setText('#staffTab', tr('staffTab')); setText('#clientTab', tr('clientTab')); setText('#loginEyebrow', tr('loginEyebrow'));
+      setText('#loginTitle', loginMode === 'client' ? tr('loginTitleClient') : tr('loginTitleStaff')); setText('#loginSubtext', loginMode === 'client' ? tr('loginSubtextClient') : tr('loginSubtextStaff'));
+      setText('#usernameLabel', tr('usernameLabel')); setText('#passwordLabel', tr('passwordLabel')); setPlaceholder('#username', tr('usernamePlaceholder')); setPlaceholder('#password', tr('passwordPlaceholder')); setText('#loginBtn', tr('loginBtn'));
+      setHTML('#demoAccountsBox', loginMode === 'client' ? tr('demoAccountsClient') : tr('demoAccountsStaff'));
+
+      setText('#dashboardEyebrow', tr('dashboardEyebrow')); setText('#dashboardNavBtn', currentLanguage === 'zh' ? '仪表板' : 'Dashboard'); setText('#dashStat1Label', currentLanguage === 'zh' ? '团队组别' : 'Team Groups'); setText('#dashStat2Label', currentLanguage === 'zh' ? '员工总数' : 'Total Staff'); setText('#dashStat3Label', currentLanguage === 'zh' ? '管理账号' : 'Management Accounts'); setText('#dashStat4Label', currentLanguage === 'zh' ? '客户账号' : 'Client Accounts'); setText('#dashboardTeamTitle', currentLanguage === 'zh' ? '团队目录' : 'Team Directory'); setText('#dashboardTeamNote', currentLanguage === 'zh' ? '先查看团队成员，再进入业务页面处理货物。' : 'View the people in each operational team before entering shipment operations.'); setText('#clientPortalEyebrow', tr('clientPortalEyebrow'));
+      if (currentUser) {
+        const roleText = roleLabel(currentUser.role);
+        document.getElementById('welcomeText').textContent = currentLanguage === 'zh' ? `${tr('welcomePrefix')}，${currentUser.name}（${roleText}）` : `${tr('welcomePrefix')}, ${currentUser.name} (${roleText})`;
+      }
+      if (currentClient) {
+        document.getElementById('clientWelcomeText').textContent = currentLanguage === 'zh' ? `${tr('welcomePrefix')}，${currentClient.name}` : `${tr('welcomePrefix')}, ${currentClient.name}`;
+      }
+      setText('#welcomeSub', tr('welcomeSub')); setText('#clientWelcomeSub', tr('clientWelcomeSub')); setText('#alertsTitle', tr('alertsTitle'));
+      setText('#operationsNavLabel', currentLanguage === 'zh' ? '业务页面' : 'Operations'); setText('#operationsOverviewMenuBtn', currentLanguage === 'zh' ? '货物总览' : 'Shipment Overview'); setText('#operationsCompletedMenuBtn', currentLanguage === 'zh' ? '已完成任务' : 'Completed Tasks'); setText('#accountMgmtBtnLabel', currentLanguage === 'zh' ? '账户管理' : 'Account Management'); setText('#staffAccountMenuBtn', currentLanguage === 'zh' ? '员工账户' : 'Staff Account'); setText('#clientAccountMenuBtn', currentLanguage === 'zh' ? '客户账户' : 'Client Account'); setText('#resetMenuBtnLabel', currentLanguage === 'zh' ? '重置' : 'Reset'); setText('#resetCargoBtn', tr('resetCargo')); setText('#resetUsersBtn', tr('resetUsers')); setText('#logoutBtn', tr('logout')); setText('#clientLogoutBtn', tr('logout'));
+      setText('#stat1Label', tr('stat1')); setText('#stat2Label', tr('stat2')); setText('#stat3Label', tr('stat3')); setText('#stat4Label', tr('stat4'));
+      setText('#shipmentPanelTitle', tr('shipmentPanelTitle')); setText('#shipmentPanelNote', tr('shipmentPanelNote')); setPlaceholder('#searchInput', tr('searchPlaceholder')); setText('#completedPageTitle', currentLanguage === 'zh' ? '已完成任务' : 'Completed Tasks'); setText('#completedPageNote', currentLanguage === 'zh' ? '已完成货物会按年份归档在这里，并至少保留 5 年。' : 'Archived completed shipments are grouped by year and kept for a minimum of 5 years.'); setPlaceholder('#completedSearchInput', currentLanguage === 'zh' ? '按 CL 编号搜索已完成任务' : 'Search CL code'); renderPhaseFilterOptions();
+
+      setText('#createOrderTitle', tr('createOrderTitle')); setText('#createOrderNote', tr('createOrderNote')); setText('#labelNewClient', tr('labelNewClient')); setText('#labelNewOrigin', tr('labelNewOrigin')); setText('#labelNewDestination', tr('labelNewDestination')); setText('#labelNewOwner', tr('labelNewOwner')); setText('#labelNewPhaseEta', tr('labelNewPhaseEta')); setText('#labelNewNextEta', tr('labelNewNextEta')); setText('#labelNewNextStep', tr('labelNewNextStep')); setText('#labelNewPriority', tr('labelNewPriority')); setText('#labelNewInCharge', tr('labelNewInCharge')); setText('#labelNewNotes', tr('labelNewNotes')); renderInChargeChecklist(getCheckedInCharge()); setPlaceholder('#newClient', tr('placeholderNewClient')); setPlaceholder('#newOrigin', tr('placeholderNewOrigin')); setPlaceholder('#newDestination', tr('placeholderNewDestination')); setPlaceholder('#newNextStep', tr('placeholderNewNextStep')); setPlaceholder('#newNotes', tr('placeholderNewNotes')); setText('#createOrderBtn', tr('createOrderBtn')); setText('#clearCreateOrderBtn', tr('clearBtn')); setHTML('#createOrderFooter', tr('createOrderFooter'));
+
+      setText('#updateTitle', tr('updateTitle')); setText('#updateNote', tr('updateNote')); setText('#labelCargoSelect', tr('labelCargoSelect')); setText('#labelCurrentPhase', tr('labelCurrentPhase')); setText('#labelPhaseEta', tr('labelPhaseEta')); setText('#labelNextStep', tr('labelNextStep')); setText('#labelNextEta', tr('labelNextEta')); setText('#labelOwner', tr('labelOwner')); setText('#labelPriority', tr('labelPriority')); setText('#labelNotes', tr('labelNotes')); setPlaceholder('#nextStep', tr('placeholderNextStep')); setPlaceholder('#notes', tr('placeholderNotes')); setText('#saveBtn', tr('saveBtn')); setHTML('#updateFooter', tr('updateFooter')); renderPhaseStageOptions(); renderOwnerOptions(); renderPriorityOptions();
+
+      setText('#adminTitle', tr('adminTitle')); setText('#adminNote', tr('adminNote')); setHTML('#adminExample', tr('adminExample')); setText('#labelAdminName', tr('labelAdminName')); setText('#labelAdminUsername', tr('labelAdminUsername')); setText('#labelAdminPassword', tr('labelAdminPassword')); setText('#labelAdminRole', tr('labelAdminRole')); setText('#workflowPermissionsLabel', tr('workflowPermissions')); setPlaceholder('#adminName', tr('placeholderAdminName')); setPlaceholder('#adminUsername', tr('placeholderAdminUsername')); setPlaceholder('#adminPassword', tr('placeholderAdminPassword')); setText('#userSaveBtn', editingUser ? tr('saveUser') : tr('addUser')); setText('#clearFormBtn', tr('clearForm')); renderRoleOptions(); syncAdminRoleUI();
+
+      setText('#clientAdminTitle', tr('clientAdminTitle')); setText('#clientAdminNote', tr('clientAdminNote')); setHTML('#clientAdminExample', tr('clientAdminExample')); setText('#labelClientAccountName', tr('labelClientAccountName')); setText('#labelClientAccountUsername', tr('labelClientAccountUsername')); setText('#labelClientAccountPassword', tr('labelClientAccountPassword')); setText('#labelClientAccountCompany', tr('labelClientAccountCompany')); setText('#bindProjectsLabel', tr('bindProjectsLabel')); setPlaceholder('#clientAccountName', tr('placeholderClientAccountName')); setPlaceholder('#clientAccountUsername', tr('placeholderClientAccountUsername')); setPlaceholder('#clientAccountPassword', tr('placeholderClientAccountPassword')); setPlaceholder('#clientAccountCompany', tr('placeholderClientAccountCompany')); setText('#clientSaveBtn', editingClient ? tr('saveClientAccount') : tr('addClientAccount')); setText('#clientClearBtn', tr('clearForm'));
+
+      setText('#clientStat1Label', tr('clientStat1')); setText('#clientStat2Label', tr('clientStat2')); setText('#clientStat3Label', tr('clientStat3')); setText('#clientStat4Label', tr('clientStat4')); setText('#clientProjectTitle', tr('clientProjectTitle')); setText('#clientProjectNote', tr('clientProjectNote'));
+      setText('#clockLabel', tr('clockLabel')); setText('#clientClockLabel', tr('clockLabel')); setText('#confirmModalTitle', currentLanguage === 'zh' ? '确认更改' : 'Confirm Changes'); setText('#confirmCancelBtn', currentLanguage === 'zh' ? '取消' : 'Cancel'); setText('#confirmApproveBtn', currentLanguage === 'zh' ? '确认' : 'Confirm');
+      renderClientBindList();
+    }
+
+    function startClock() {
+      updateClock();
+      if (window.__clockInterval) clearInterval(window.__clockInterval);
+      window.__clockInterval = setInterval(updateClock, 1000);
+    }
+    function updateClock() {
+      const sgt = getSGTNow();
+      const showStaffClock = !document.getElementById('appView').classList.contains('hidden');
+      const showClientClock = !document.getElementById('clientAppView').classList.contains('hidden');
+      document.getElementById('systemClock').classList.toggle('hidden', !showStaffClock);
+      document.getElementById('clientSystemClock').classList.toggle('hidden', !showClientClock);
+      document.getElementById('clockTime').textContent = sgt.time; document.getElementById('clockDate').textContent = sgt.date;
+      document.getElementById('clientClockTime').textContent = sgt.time; document.getElementById('clientClockDate').textContent = sgt.date;
+    }
+
+    function populateCargoSelect() {
+      const cargo = (getStoredCargo() || []).filter(item => canEditCargoForUser(item));
+      const select = document.getElementById('cargoSelect');
+      if (!cargo.length) {
+        select.innerHTML = `<option value="">${tr('noCargoAccess')}</option>`; select.disabled = true; loadSelectedCargo(''); return;
+      }
+      const currentValue = select.value; select.disabled = false;
+      select.innerHTML = cargo.map(item => `<option value="${item.id}">${item.id} - ${item.client}</option>`).join('');
+      if (cargo.some(item => item.id === currentValue)) select.value = currentValue;
+      loadSelectedCargo(select.value || cargo[0].id);
+      select.onchange = (e) => loadSelectedCargo(e.target.value);
+    }
+
+    function daysUntil(dateStr) {
+      const today = new Date(`${todayISO()}T00:00:00`);
+      const target = new Date(`${dateStr}T00:00:00`);
+      return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+    }
+    function shipmentColorStatus(item) {
+      if (item.phase === 'Delivered') return 'completed';
+      const days = daysUntil(item.nextEta);
+      if (days <= 3) return 'urgent';
+      if (days <= 5) return 'warning';
+      return 'normal';
+    }
+    function isRetainedCompleted(item) {
+      if (item.phase !== 'Delivered') return false;
+      const deliveredDate = new Date(`${item.lastUpdated || item.phaseEta}T00:00:00`);
+      const expiryDate = new Date(deliveredDate);
+      expiryDate.setFullYear(expiryDate.getFullYear() + RETENTION_YEARS);
+      return new Date() <= expiryDate;
+    }
+    function isUrgent(item) { return shipmentColorStatus(item) === 'urgent'; }
+    function needsAttention(item) { return ['urgent', 'warning'].includes(shipmentColorStatus(item)); }
+    function canEditCargo(item) { return canEditCargoForUser(item, currentUser); }
+    function canCreateOrder(user = currentUser) { if (!user) return false; if (isAdmin(user)) return true; return (user.permissions || []).includes('Inquiry'); }
+
+    function getRelevantAlertPhases(user = currentUser) {
+      if (!user) return []; if (isAdmin(user)) return [...phaseOrder];
+      const visiblePhases = new Set(user.permissions || []);
+      (user.permissions || []).forEach(phase => {
+        const currentIndex = phaseOrder.indexOf(phase);
+        if (currentIndex >= 0 && currentIndex < phaseOrder.length - 1) visiblePhases.add(phaseOrder[currentIndex + 1]);
+      });
+      return [...visiblePhases];
+    }
+    function canViewAlert(item, user = currentUser) { if (isAdmin(user)) return true; return getRelevantAlertPhases(user).includes(item.phase); }
+    function alertReason(item, user = currentUser) {
+      if (isAdmin(user)) return tr('adminVisibility');
+      const directPermissions = user.permissions || [];
+      if (directPermissions.includes(item.phase)) return tr('assignedWorkflowStage');
+      const previousPhase = phaseOrder[phaseOrder.indexOf(item.phase) - 1];
+      if (previousPhase && directPermissions.includes(previousPhase)) return `${tr('nextHandoverAfter')} ${phaseLabel(previousPhase)}`;
+      return tr('relevantWorkflowUpdate');
+    }
+
+    function setFormEnabled(enabled) { ['currentPhase','phaseEta','nextStep','nextEta','owner','priority','notes','saveBtn'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !enabled; }); }
+    function setCreateOrderEnabled(enabled) { ['newClient','newOrigin','newDestination','newOwner','newPhaseEta','newNextEta','newNextStep','newPriority','newNotes','createOrderBtn'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !enabled; }); }
+
+    function refreshCreateOrderPanel() {
+      const panel = document.getElementById('createOrderPanel'); const notice = document.getElementById('createOrderNotice'); const guard = document.getElementById('createOrderGuard');
+      if (!canCreateOrder()) { panel.classList.add('hidden'); setCreateOrderEnabled(false); return; }
+      panel.classList.remove('hidden'); notice.textContent = isAdmin() ? tr('createOrderNoticeAdmin') : tr('createOrderNoticeUser'); guard.classList.add('hidden'); setCreateOrderEnabled(true);
+    }
+
+    function generateCargoId() {
+      const cargo = getStoredCargo() || []; const year = new Date().getFullYear(); const prefix = `CL-${year}-`;
+      const maxSeq = cargo.filter(item => String(item.id || '').startsWith(prefix)).map(item => Number(String(item.id).replace(prefix, '')) || 0).reduce((max, value) => Math.max(max, value), 0);
+      return `${prefix}${String(maxSeq + 1).padStart(3, '0')}`;
+    }
+
+    function clearCreateOrderForm() {
+      document.getElementById('newClient').value = ''; document.getElementById('newOrigin').value = ''; document.getElementById('newDestination').value = '';
+      document.getElementById('newOwner').value = 'China Operations'; document.getElementById('newPhaseEta').value = todayISO(); document.getElementById('newNextEta').value = addDays(3);
+      document.getElementById('newNextStep').value = tr('defaultCreateOrderNextStep'); document.getElementById('newPriority').value = 'Medium'; document.getElementById('newNotes').value = ''; document.getElementById('createOrderMessage').textContent = '';
+      renderInChargeChecklist(['China Operations']);
+    }
+
+    function createOrder() {
+      const msg = document.getElementById('createOrderMessage'); if (!canCreateOrder()) { msg.textContent = tr('createOrderNoPermission'); return; }
+      const client = document.getElementById('newClient').value.trim(); const origin = document.getElementById('newOrigin').value.trim(); const destination = document.getElementById('newDestination').value.trim();
+      const owner = document.getElementById('newOwner').value; const phaseEta = document.getElementById('newPhaseEta').value; const nextEta = document.getElementById('newNextEta').value; const nextStep = document.getElementById('newNextStep').value.trim(); const priority = document.getElementById('newPriority').value; const inCharge = getCheckedInCharge(); const notes = document.getElementById('newNotes').value.trim();
+      if (!client || !origin || !destination || !phaseEta || !nextEta || !nextStep || !inCharge.length) { msg.textContent = tr('createOrderRequired'); return; }
+      const cargo = getStoredCargo() || []; const stamp = nowTimestamp();
+      const newCargo = { id: generateCargoId(), client, origin, destination, phase: 'Inquiry', phaseEta, nextStep, nextEta, owner, priority, inCharge, notes, updatedBy: currentUser.name, lastUpdated: todayISO(), lastUpdatedAt: stamp };
+      cargo.unshift(newCargo); setStoredCargo(cargo); populateCargoSelect(); renderDashboard(); renderClientBindList(); document.getElementById('cargoSelect').value = newCargo.id; loadSelectedCargo(newCargo.id); clearCreateOrderForm(); document.getElementById('createOrderMessage').textContent = `${tr('createOrderSuccessPrefix')} ${newCargo.id} ${tr('createOrderSuccessSuffix')}`;
+    }
+
+    function loadSelectedCargo(cargoId) {
+      const cargo = (getStoredCargo() || []).filter(item => canEditCargoForUser(item)); const item = cargo.find(c => c.id === cargoId) || cargo[0]; const guard = document.getElementById('editGuardNotice');
+      if (!item) {
+        document.getElementById('currentPhase').value = 'Inquiry'; document.getElementById('phaseEta').value = ''; document.getElementById('nextStep').value = ''; document.getElementById('nextEta').value = ''; document.getElementById('owner').value = 'China Operations'; document.getElementById('priority').value = 'Medium'; document.getElementById('notes').value = ''; guard.textContent = tr('noEditableRecords'); guard.classList.remove('hidden'); setFormEnabled(false); return;
+      }
+      document.getElementById('currentPhase').value = item.phase; document.getElementById('phaseEta').value = item.phaseEta; document.getElementById('nextStep').value = item.nextStep; document.getElementById('nextEta').value = item.nextEta; document.getElementById('owner').value = item.owner; document.getElementById('priority').value = item.priority; document.getElementById('notes').value = item.notes; guard.classList.add('hidden'); setFormEnabled(true);
+    }
+
+    function renderDashboard() {
+      const cargo = getStoredCargo() || [];
+      const overviewCargo = cargo.filter(item => item.phase !== 'Delivered' && canViewCargoInOverview(item));
+      const search = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const phaseFilter = document.getElementById('phaseFilter').value;
+      const urgencyRank = { urgent: 0, warning: 1, normal: 2, completed: 3 };
+
+      const filtered = overviewCargo
+        .filter(item => ([item.id, item.client, item.destination, item.origin, item.owner].join(' ').toLowerCase().includes(search)) && (phaseFilter === 'all' || item.phase === phaseFilter))
+        .sort((a, b) => {
+          const rankDiff = urgencyRank[shipmentColorStatus(a)] - urgencyRank[shipmentColorStatus(b)];
+          if (rankDiff !== 0) return rankDiff;
+          const dayDiff = daysUntil(a.nextEta) - daysUntil(b.nextEta);
+          if (dayDiff !== 0) return dayDiff;
+          return a.id.localeCompare(b.id);
+        });
+      document.getElementById('totalShipments').textContent = overviewCargo.length; document.getElementById('actionRequired').textContent = overviewCargo.filter(needsAttention).length; document.getElementById('urgentItems').textContent = overviewCargo.filter(isUrgent).length; document.getElementById('deliveredItems').textContent = cargo.filter(c => c.phase === 'Delivered' && isRetainedCompleted(c)).length;
+      const list = document.getElementById('cargoList'); list.innerHTML = filtered.length ? filtered.map(item => renderCargoCard(item)).join('') : `<div class="muted">${tr('noShipmentRecords')}</div>`;
+      renderAlerts(cargo); const selectedId = document.getElementById('cargoSelect').value; loadSelectedCargo(selectedId);
+    }
+
+    function renderCargoCard(item) {
+      const currentIndex = phaseOrder.indexOf(item.phase);
+      const colorStatus = shipmentColorStatus(item);
+      const urgent = colorStatus === 'urgent';
+      const warning = colorStatus === 'warning';
+      const completed = colorStatus === 'completed';
+      const statusClass = completed ? 'completed' : urgent ? 'urgent' : warning ? 'warning' : ''; const daysToNext = daysUntil(item.nextEta); const canEdit = canEditCargo(item); const attentionText = urgent ? tr('urgentFollowUp') : warning ? tr('actionSoon') : tr('onTrack'); const dayText = daysToNext > 0 ? (currentLanguage === 'zh' ? `（${daysToNext}${tr('days')}）` : `(${daysToNext} ${tr('days')})`) : '';
+      return `
+        <div class="cargo-card ${statusClass}">
+          <div class="cargo-top">
+            <div>
+              <h3>${item.id} · ${item.client}</h3>
+              <div class="muted">${item.origin} → ${item.destination}</div>
+              <div class="badge-row">
+                <span class="badge phase">${phaseLabel(item.phase)}</span>
+                <span class="badge owner">${ownerLabel(item.owner)}</span>
+                <span class="badge ${urgent ? 'alert' : 'owner'}">${priorityLabel(item.priority)}</span>
+                <span class="badge permission">${canEdit ? tr('editableByYou') : tr('viewOnly')}</span>
+                ${(item.inCharge || []).map(team => `<span class="badge owner">${ownerLabel(team)}</span>`).join('')}
+              </div>
+            </div>
+            <div class="small">${tr('lastUpdated')}：${item.lastUpdatedAt || item.lastUpdated}<br>${tr('createdByLabel')}：${item.updatedBy}</div>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-box"><div class="meta-label">${tr('currentPhaseEta')}</div><div>${item.phaseEta}</div></div>
+            <div class="meta-box"><div class="meta-label">${tr('nextStepEta')}</div><div>${item.nextEta} ${dayText}</div></div>
+            <div class="meta-box"><div class="meta-label">${tr('nextStepLabel')}</div><div>${item.nextStep}</div></div>
+            <div class="meta-box"><div class="meta-label">${tr('systemStatus')}</div><div>${attentionText}</div></div>
+          </div>
+          <div class="muted"><strong>${tr('notesLabel')}：</strong>${item.notes}</div>
+          <div class="small" style="margin-top:10px;"><strong>${tr('timestampLabel')}：</strong>${item.lastUpdatedAt || item.lastUpdated}</div>
+          <div class="timeline">${phaseOrder.map((phase, index) => { let cls = ''; if (index < currentIndex) cls = 'done'; if (index === currentIndex) cls = 'current'; return `<div class="timeline-step ${cls}">${phaseLabel(phase)}</div>`; }).join('')}</div>
+        </div>`;
+    }
+
+    function renderAlerts(cargo) {
+      const sorted = [...cargo].sort((a, b) => daysUntil(a.nextEta) - daysUntil(b.nextEta)); const visibleAlerts = sorted.filter(item => needsAttention(item) && canViewAlert(item)).slice(0, 8); document.getElementById('alertCount').textContent = visibleAlerts.length;
+      const alertsBox = document.getElementById('alertsContainer');
+      if (!visibleAlerts.length) { alertsBox.innerHTML = `<div class="alert-item success"><h4>${tr('alertsNoneTitle')}</h4><div class="muted">${tr('alertsNoneText')}</div></div>`; return; }
+      alertsBox.innerHTML = visibleAlerts.map(item => { const urgent = isUrgent(item); const days = daysUntil(item.nextEta); const etaText = currentLanguage === 'zh' ? `${item.nextEta}（${days}${tr('days')}）` : `${item.nextEta} (${days} ${tr('days')})`; return `<div class="alert-item ${urgent ? 'urgent' : ''}"><h4>${item.id} · ${item.client}</h4><div class="muted"><strong>${tr('currentPhaseLabel')}：</strong>${phaseLabel(item.phase)}</div><div class="muted"><strong>${tr('nextStepLabel')}：</strong>${item.nextStep}</div><div class="muted"><strong>${tr('ownerLabel')}：</strong>${ownerLabel(item.owner)}</div><div class="muted"><strong>${tr('etaLabel')}：</strong>${etaText}</div><div class="small" style="margin-top:8px;">${tr('priorityLabel')}：${priorityLabel(item.priority)} · ${tr('reasonLabel')}：${alertReason(item)}</div></div>`; }).join('');
+    }
+
+    function toggleAlerts(event) { event.stopPropagation(); document.getElementById('alertsDropdown').classList.toggle('hidden'); }
+    function toggleOperationsMenu(event) { event.stopPropagation(); document.getElementById('operationsDropdown').classList.toggle('hidden'); }
+    function toggleAccountMenu(event) { event.stopPropagation(); document.getElementById('accountMgmtDropdown').classList.toggle('hidden'); }
+    function toggleResetMenu(event) { event.stopPropagation(); document.getElementById('resetDropdown').classList.toggle('hidden'); }
+    function toggleOperationsMenu(event) { event.stopPropagation(); document.getElementById('operationsDropdown').classList.toggle('hidden'); }
+    function showOperationsOverview() {
+      document.getElementById('operationsDropdown').classList.add('hidden');
+      showStaffPage('operations');
+    }
+    function showCompletedTasksPage() {
+      document.getElementById('operationsDropdown').classList.add('hidden');
+      showStaffPage('completed');
+    }
+    
+    document.addEventListener('click', () => {
+      const alertDropdown = document.getElementById('alertsDropdown');
+      const operationsDropdown = document.getElementById('operationsDropdown');
+      const accountDropdown = document.getElementById('accountMgmtDropdown');
+      const resetDropdown = document.getElementById('resetDropdown');
+      if (alertDropdown) alertDropdown.classList.add('hidden');
+      if (operationsDropdown) operationsDropdown.classList.add('hidden');
+      if (accountDropdown) accountDropdown.classList.add('hidden');
+      if (resetDropdown) resetDropdown.classList.add('hidden');
+    });
+
+    function updateCargo() {
+      const cargoId = document.getElementById('cargoSelect').value; const cargo = getStoredCargo() || []; const idx = cargo.findIndex(c => c.id === cargoId); if (idx === -1) return;
+      if (!canEditCargo(cargo[idx])) { document.getElementById('saveMessage').textContent = tr('noPermissionAmend'); return; }
+      cargo[idx] = { ...cargo[idx], phase: document.getElementById('currentPhase').value, phaseEta: document.getElementById('phaseEta').value, nextStep: document.getElementById('nextStep').value.trim(), nextEta: document.getElementById('nextEta').value, owner: document.getElementById('owner').value, priority: document.getElementById('priority').value, notes: document.getElementById('notes').value.trim(), updatedBy: currentUser.name, lastUpdated: todayISO(), lastUpdatedAt: nowTimestamp() };
+      setStoredCargo(cargo); renderDashboard(); populateCargoSelect(); renderClientBindList(); if (currentClient) renderClientPortal(); document.getElementById('cargoSelect').value = cargoId; loadSelectedCargo(cargoId); document.getElementById('saveMessage').textContent = tr('shipmentUpdated'); setTimeout(() => { document.getElementById('saveMessage').textContent = ''; }, 2500);
+    }
+
+    function renderPermissionChecklist(selected = []) {
+      const wrap = document.getElementById('permissionChecklist');
+      wrap.innerHTML = workflowOptions.map(option => `<label class="permission-item"><input type="checkbox" class="permission-check" value="${option.value}" ${selected.includes(option.value) ? 'checked' : ''} /><div><div><strong>${workflowLabel(option.value)}</strong></div><div class="small">${option.value}</div></div></label>`).join('');
+      syncAdminRoleUI();
+    }
+    function syncAdminRoleUI() { const role = document.getElementById('adminRole'); const isAdminRole = role.value === 'Admin'; document.querySelectorAll('.permission-check').forEach(cb => { cb.disabled = isAdminRole; }); }
+    function getCheckedPermissions() { return [...document.querySelectorAll('.permission-check:checked')].map(cb => cb.value); }
+
+    function openConfirmModal(title, message, onConfirm) {
+      pendingConfirmAction = onConfirm;
+      document.getElementById('confirmModalTitle').textContent = title;
+      document.getElementById('confirmModalMessage').textContent = message;
+      document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      pendingConfirmAction = null;
+      document.getElementById('confirmModal').classList.add('hidden');
+    }
+
+    function confirmModalAction() {
+      if (typeof pendingConfirmAction === 'function') pendingConfirmAction();
+      closeConfirmModal();
+    }
+
+    function clearUserForm() {
+      editingUser = null; document.getElementById('adminName').value = ''; document.getElementById('adminUsername').value = ''; document.getElementById('adminPassword').value = ''; document.getElementById('adminRole').value = managedRoleByUser() || 'Singapore Office'; renderPermissionChecklist([]); document.getElementById('userSaveBtn').textContent = isAdmin() ? tr('addUser') : (currentLanguage === 'zh' ? '保存修改' : 'Save Changes'); document.getElementById('userSaveMessage').textContent = ''; renderRoleOptions();
+    }
+
+    function saveUser() {
+      const name = document.getElementById('adminName').value.trim(); const username = document.getElementById('adminUsername').value.trim(); const password = document.getElementById('adminPassword').value.trim(); const role = document.getElementById('adminRole').value; const permissions = role === 'Admin' ? ['*'] : getCheckedPermissions(); const msg = document.getElementById('userSaveMessage'); const users = getStoredUsers() || [];
+      if (!name || !username) { msg.textContent = tr('userRequired'); return; }
+      if (!editingUser && !password) { msg.textContent = tr('userPasswordRequired'); return; }
+      if (role !== 'Admin' && permissions.length === 0) { msg.textContent = tr('userPermissionRequired'); return; }
+      const existingIndex = users.findIndex(u => u.username === username); if (!editingUser && existingIndex !== -1) { msg.textContent = tr('userExists'); return; }
+      if (!isAdmin()) {
+        if (!editingUser) { msg.textContent = currentLanguage === 'zh' ? '管理账号只能修改本地区员工账号，不能新增账号。' : 'Management accounts can only edit staff accounts for their own side and cannot create new accounts.'; return; }
+        const targetUser = users.find(u => u.username === editingUser);
+        if (!canManageStaffUser(targetUser)) { msg.textContent = currentLanguage === 'zh' ? '你只能管理本地区员工账号。' : 'You can only manage staff accounts for your own side.'; return; }
+        const forcedRole = managedRoleByUser();
+        if (role !== forcedRole) { msg.textContent = currentLanguage === 'zh' ? '你只能保留本地区员工角色。' : 'You can only keep the staff role for your own side.'; return; }
+      }
+
+      openConfirmModal(
+        currentLanguage === 'zh' ? '确认更改' : 'Confirm Changes',
+        editingUser ? (currentLanguage === 'zh' ? `确认保存员工账号 ${username} 的修改吗？` : `Confirm saving changes for staff account ${username}?`) : (currentLanguage === 'zh' ? `确认新增员工账号 ${username} 吗？` : `Confirm adding staff account ${username}?`),
+        () => {
+          if (editingUser) {
+            const idx = users.findIndex(u => u.username === editingUser); if (idx === -1) { msg.textContent = tr('userNotFound'); return; }
+            if (!canManageStaffUser(users[idx])) { msg.textContent = currentLanguage === 'zh' ? '你只能管理本地区员工账号。' : 'You can only manage staff accounts for your own side.'; return; }
+            const oldUsername = users[idx].username; users[idx] = { ...users[idx], name, username, password: password || users[idx].password, role, permissions };
+            if (oldUsername !== username && users.some((u, i) => u.username === username && i !== idx)) { msg.textContent = tr('userExists'); return; }
+            editingUser = username;
+          } else users.push({ name, username, password, role, permissions });
+          setStoredUsers(users); if (currentUser) currentUser = users.find(u => u.username === currentUser.username) || currentUser; renderAdminPanel(); refreshPermissionNotice(); clearUserForm(); renderAdminPanel(); msg.textContent = tr('userSaved');
+        }
+      );
+    }
+
+    function editUser(username) {
+      const users = getStoredUsers() || []; const user = users.find(u => u.username === username); if (!user) return;
+      if (!canManageStaffUser(user)) return; editingUser = user.username; document.getElementById('adminName').value = user.name; document.getElementById('adminUsername').value = user.username; document.getElementById('adminPassword').value = ''; document.getElementById('adminRole').value = user.role; renderRoleOptions(); renderPermissionChecklist(isAdmin(user) ? [] : (user.permissions || [])); document.getElementById('userSaveBtn').textContent = tr('saveUser'); document.getElementById('userSaveMessage').textContent = '';
+    }
+
+    function deleteUser(username) {
+      const users = getStoredUsers() || []; const msg = document.getElementById('userSaveMessage');
+      if (username === 'admin') { msg.textContent = tr('mainAdminCannotRemove'); return; }
+      const targetUser = users.find(u => u.username === username);
+      if (!canManageStaffUser(targetUser)) { msg.textContent = currentLanguage === 'zh' ? '你只能删除本地区员工账号。' : 'You can only remove staff accounts for your own side.'; return; }
+      if (currentUser && username === currentUser.username) { msg.textContent = tr('currentAccountCannotRemove'); return; }
+      openConfirmModal(
+        currentLanguage === 'zh' ? '确认删除' : 'Confirm Delete',
+        currentLanguage === 'zh' ? `确认删除员工账号 ${username} 吗？` : `Confirm deleting staff account ${username}?`,
+        () => {
+          setStoredUsers(users.filter(u => u.username !== username)); renderAdminPanel(); msg.textContent = tr('userRemoved');
+        }
+      );
+    }
+
+    function renderAdminPanel() {
+      const adminPanel = document.getElementById('adminPanel');
+      const clientAdminPanel = document.getElementById('clientAdminPanel');
+
+      if (!canManageAccounts()) {
+        adminPanel.classList.add('hidden');
+        clientAdminPanel.classList.add('hidden');
+        return;
+      }
+
+      adminPanel.classList.toggle('hidden', currentStaffPage !== 'staffAccount');
+      clientAdminPanel.classList.toggle('hidden', currentStaffPage !== 'clientAccount' || !canManageClientAccounts());
+
+      const users = getStoredUsers() || [];
+      const list = document.getElementById('userList');
+      const visibleUsers = isAdmin() ? users : users.filter(user => canManageStaffUser(user));
+      list.innerHTML = visibleUsers.map(user => `<div class="user-card"><div class="user-card-top"><div><div><strong>${user.name}</strong></div><div class="muted">${user.username} · ${roleLabel(user.role)}</div></div><div class="user-actions"><button class="btn btn-secondary" onclick="editUser('${user.username}')">${tr('edit')}</button><button class="btn btn-danger" onclick="deleteUser('${user.username}')">${tr('remove')}</button></div></div><div class="badge-row">${permissionDisplayList(user).map(item => `<span class="badge permission">${item}</span>`).join('')}</div></div>`).join('');
+
+      if (canManageClientAccounts()) renderClientAccounts();
+
+      if (!editingUser && !document.getElementById('adminUsername').value) clearUserForm();
+      const saveBtn = document.getElementById('userSaveBtn');
+      if (saveBtn) saveBtn.textContent = isAdmin() ? (editingUser ? tr('saveUser') : tr('addUser')) : (currentLanguage === 'zh' ? '保存修改' : 'Save Changes');
+    }
+
+    function renderClientBindList(selected = []) {
+      const wrap = document.getElementById('clientBindList'); if (!wrap) return;
+      const cargo = getStoredCargo() || [];
+      if (!cargo.length) { wrap.innerHTML = `<div class="small">${tr('projectBindingNone')}</div>`; return; }
+      wrap.innerHTML = cargo.map(item => `<label class="bind-item"><input type="checkbox" class="client-bind-check" value="${item.id}" ${selected.includes(item.id) ? 'checked' : ''} /><div><div><strong>${item.id}</strong> · ${item.client}</div><div class="small">${phaseLabel(item.phase)} · ${item.origin} → ${item.destination}</div></div></label>`).join('');
+    }
+    function getCheckedClientProjects() { return [...document.querySelectorAll('.client-bind-check:checked')].map(cb => cb.value); }
+
+    function clearClientForm() {
+      editingClient = null; document.getElementById('clientAccountName').value = ''; document.getElementById('clientAccountUsername').value = ''; document.getElementById('clientAccountPassword').value = ''; document.getElementById('clientAccountCompany').value = ''; renderClientBindList([]); document.getElementById('clientSaveBtn').textContent = tr('addClientAccount'); document.getElementById('clientSaveMessage').textContent = '';
+    }
+
+    function saveClientAccount() {
+      const name = document.getElementById('clientAccountName').value.trim(); const username = document.getElementById('clientAccountUsername').value.trim(); const password = document.getElementById('clientAccountPassword').value.trim(); const company = document.getElementById('clientAccountCompany').value.trim(); const boundProjects = getCheckedClientProjects(); const msg = document.getElementById('clientSaveMessage'); const clients = getStoredClients() || [];
+      if (!name || !username || (!editingClient && !password) || !company) { msg.textContent = tr('clientRequired'); return; }
+      if (!editingClient && clients.some(c => c.username === username)) { msg.textContent = tr('clientExists'); return; }
+      openConfirmModal(
+        currentLanguage === 'zh' ? '确认更改' : 'Confirm Changes',
+        editingClient ? (currentLanguage === 'zh' ? `确认保存客户账号 ${username} 的修改吗？` : `Confirm saving changes for client account ${username}?`) : (currentLanguage === 'zh' ? `确认新增客户账号 ${username} 吗？` : `Confirm adding client account ${username}?`),
+        () => {
+          if (editingClient) {
+            const idx = clients.findIndex(c => c.username === editingClient); if (idx === -1) { msg.textContent = tr('clientExists'); return; }
+            const oldUsername = clients[idx].username; clients[idx] = { ...clients[idx], name, username, password: password || clients[idx].password, company, boundProjects, lastUpdatedAt: nowTimestamp(), lastUpdatedBy: currentUser.name };
+            if (oldUsername !== username && clients.some((c, i) => c.username === username && i !== idx)) { msg.textContent = tr('clientExists'); return; }
+            editingClient = username;
+          } else {
+            clients.push({ name, username, password, company, boundProjects, lastUpdatedAt: nowTimestamp(), lastUpdatedBy: currentUser.name });
+          }
+          setStoredClients(clients); renderClientAccounts(); clearClientForm(); msg.textContent = tr('clientSaved');
+        }
+      );
+    }
+
+    function editClientAccount(username) {
+      const clients = getStoredClients() || []; const client = clients.find(c => c.username === username); if (!client) return;
+      editingClient = client.username; document.getElementById('clientAccountName').value = client.name; document.getElementById('clientAccountUsername').value = client.username; document.getElementById('clientAccountPassword').value = ''; document.getElementById('clientAccountCompany').value = client.company; renderClientBindList(client.boundProjects || []); document.getElementById('clientSaveBtn').textContent = tr('saveClientAccount'); document.getElementById('clientSaveMessage').textContent = '';
+    }
+
+    function deleteClientAccount(username) {
+      const clients = getStoredClients() || [];
+      openConfirmModal(
+        currentLanguage === 'zh' ? '确认删除' : 'Confirm Delete',
+        currentLanguage === 'zh' ? `确认删除客户账号 ${username} 吗？` : `Confirm deleting client account ${username}?`,
+        () => {
+          setStoredClients(clients.filter(c => c.username !== username)); renderClientAccounts(); document.getElementById('clientSaveMessage').textContent = tr('clientRemoved');
+        }
+      );
+    }
+
+    function renderClientAccounts() {
+      const clients = getStoredClients() || []; const list = document.getElementById('clientAccountList');
+      list.innerHTML = clients.map(client => `<div class="client-card"><div class="user-card-top"><div><div><strong>${client.name}</strong></div><div class="muted">${client.username} · ${client.company}</div><div class="small">${tr('timestampLabel')}：${client.lastUpdatedAt || ''}</div></div><div class="user-actions"><button class="btn btn-secondary" onclick="editClientAccount('${client.username}')">${tr('edit')}</button><button class="btn btn-danger" onclick="deleteClientAccount('${client.username}')">${tr('remove')}</button></div></div><div class="badge-row">${(client.boundProjects || []).map(projectId => `<span class="badge permission">${projectId}</span>`).join('') || `<span class="badge owner">0</span>`}</div></div>`).join('');
+    }
+
+    function getClientBoundCargo(client = currentClient) {
+      if (!client) return [];
+      const cargo = getStoredCargo() || []; const ids = new Set(client.boundProjects || []); return cargo.filter(item => ids.has(item.id));
+    }
+
+    function populateCompletedYearFilter() {
+      const select = document.getElementById('completedYearFilter');
+      if (!select) return;
+      const cargo = (getStoredCargo() || []).filter(item => item.phase === 'Delivered' && isRetainedCompleted(item));
+      const years = [...new Set(cargo.map(item => String((item.lastUpdated || item.phaseEta || '').slice(0, 4))).filter(Boolean))].sort((a, b) => Number(b) - Number(a));
+      const currentValue = select.value || 'all';
+      select.innerHTML = `<option value="all">${currentLanguage === 'zh' ? '全部年份' : 'All Years'}</option>` + years.map(year => `<option value="${year}">${year}</option>`).join('');
+      if ([...select.options].some(option => option.value === currentValue)) select.value = currentValue;
+    }
+
+    function toggleCompletedSection(event) {
+      if (event) event.stopPropagation();
+      const section = document.getElementById('completedInlineSection');
+      const isHidden = section.classList.toggle('hidden');
+      document.getElementById('completedToggleLabel').textContent = isHidden
+        ? (currentLanguage === 'zh' ? '显示已完成任务' : 'Show Completed Tasks')
+        : (currentLanguage === 'zh' ? '隐藏已完成任务' : 'Hide Completed Tasks');
+      if (!isHidden) renderCompletedInlineSection();
+    }
+
+    function renderCompletedPage() {
+      populateCompletedYearFilter();
+      const search = (document.getElementById('completedSearchInput')?.value || '').trim().toLowerCase();
+      const yearFilter = document.getElementById('completedYearFilter')?.value || 'all';
+      const completedCargo = (getStoredCargo() || [])
+        .filter(item => item.phase === 'Delivered' && isRetainedCompleted(item))
+        .filter(item => {
+          const matchCode = String(item.id || '').toLowerCase().includes(search);
+          const itemYear = String((item.lastUpdated || item.phaseEta || '').slice(0, 4));
+          const matchYear = yearFilter === 'all' || itemYear === yearFilter;
+          return matchCode && matchYear;
+        });
+
+      const grouped = completedCargo.reduce((acc, item) => {
+        const year = String((item.lastUpdated || item.phaseEta || '').slice(0, 4));
+        if (!acc[year]) acc[year] = [];
+        acc[year].push(item);
+        return acc;
+      }, {});
+
+      const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+      const list = document.getElementById('completedPageList');
+      if (!years.length) {
+        list.innerHTML = `<div class="muted">${currentLanguage === 'zh' ? '没有符合条件的已完成任务。' : 'No completed tasks match the current CL code search or year filter.'}</div>`;
+        return;
+      }
+
+      list.innerHTML = years.map(year => `
+        <div style="margin-bottom: 18px;">
+          <h3 style="font-size: 18px; margin-bottom: 10px; color: var(--primary);">${year}</h3>
+          <div class="cargo-list">${grouped[year].map(item => renderCargoCard(item)).join('')}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderTeamDashboard() {
+      const users = getStoredUsers() || [];
+      const clients = getStoredClients() || [];
+      const teamOrder = ['Singapore Office', 'China Operations', 'Logistics Team', 'Manufacturing Team', 'Customs Broker', 'Admin'];
+      const visibleUsers = isAdmin() ? users : users.filter(user => {
+        if (isSingaporeManagement()) return user.role === 'Singapore Office' || user.username === 'sgmgmt';
+        if (isChinaManagement()) return user.role === 'China Operations' || user.username === 'cnmgmt';
+        return true;
+      });
+
+      const grouped = teamOrder.map(role => ({
+        role,
+        members: visibleUsers.filter(user => user.role === role)
+      })).filter(group => group.members.length);
+
+      document.getElementById('teamGroupCount').textContent = grouped.length;
+      document.getElementById('teamMemberCount').textContent = visibleUsers.length;
+      document.getElementById('managementCount').textContent = users.filter(user => ['sgmgmt', 'cnmgmt', 'admin'].includes(user.username)).length;
+      document.getElementById('dashboardClientCount').textContent = clients.length;
+
+      const grid = document.getElementById('teamDirectoryGrid');
+      grid.innerHTML = grouped.map(group => `
+        <div class="card stat-card team-group-card">
+          <h3 class="team-group-title">${roleLabel(group.role)}</h3>
+          <div class="team-member-list">
+            ${group.members.map(member => `
+              <div class="team-member-card">
+                <div class="team-member-name">${member.name}</div>
+                <div class="small" style="margin-top:4px;">${member.username}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('') || `<div class="muted">${currentLanguage === 'zh' ? '目前没有团队成员资料。' : 'No team members available.'}</div>`;
+    }
+
+    function renderClientPortal() {
+      if (!currentClient) return;
+      const boundCargo = getClientBoundCargo();
+      document.getElementById('clientWelcomeText').textContent = currentLanguage === 'zh' ? `${tr('welcomePrefix')}，${currentClient.name}` : `${tr('welcomePrefix')}, ${currentClient.name}`;
+      document.getElementById('clientTotalProjects').textContent = boundCargo.length;
+      document.getElementById('clientActiveProjects').textContent = boundCargo.filter(item => item.phase !== 'Delivered').length;
+      document.getElementById('clientAttentionProjects').textContent = boundCargo.filter(needsAttention).length;
+      document.getElementById('clientDeliveredProjects').textContent = boundCargo.filter(item => item.phase === 'Delivered').length;
+      const list = document.getElementById('clientProjectList');
+      if (!boundCargo.length) { list.innerHTML = `<div class="card panel"><div class="muted">${tr('noClientProjects')}</div></div>`; return; }
+      list.innerHTML = boundCargo.map(item => renderClientCargoCard(item)).join('');
+    }
+
+    function renderClientCargoCard(item) {
+      const currentIndex = phaseOrder.indexOf(item.phase); const urgent = isUrgent(item); const warning = !urgent && needsAttention(item); const statusClass = urgent ? 'urgent' : (warning ? 'warning' : ''); const attentionText = urgent ? tr('urgentFollowUp') : warning ? tr('actionSoon') : tr('onTrack');
+      return `<div class="cargo-card ${statusClass}"><div class="cargo-top"><div><h3>${item.id} · ${item.client}</h3><div class="muted">${item.origin} → ${item.destination}</div><div class="badge-row"><span class="badge phase">${phaseLabel(item.phase)}</span><span class="badge owner">${ownerLabel(item.owner)}</span><span class="badge permission">${tr('clientProjectVisible')}</span></div></div><div class="small">${tr('lastUpdated')}：${item.lastUpdatedAt || item.lastUpdated}</div></div><div class="meta-grid"><div class="meta-box"><div class="meta-label">${tr('currentPhaseEta')}</div><div>${item.phaseEta}</div></div><div class="meta-box"><div class="meta-label">${tr('nextStepEta')}</div><div>${item.nextEta}</div></div><div class="meta-box"><div class="meta-label">${tr('nextStepLabel')}</div><div>${item.nextStep}</div></div><div class="meta-box"><div class="meta-label">${tr('systemStatus')}</div><div>${attentionText}</div></div></div><div class="muted"><strong>${tr('notesLabel')}：</strong>${item.notes}</div><div class="small" style="margin-top:10px;"><strong>${tr('timestampLabel')}：</strong>${item.lastUpdatedAt || item.lastUpdated}<br><strong>${tr('createdByLabel')}：</strong>${item.updatedBy}</div><div class="timeline">${phaseOrder.map((phase, index) => { let cls = ''; if (index < currentIndex) cls = 'done'; if (index === currentIndex) cls = 'current'; return `<div class="timeline-step ${cls}">${phaseLabel(phase)}</div>`; }).join('')}</div></div>`;
+    }
+
+    applyLanguage();
+    applyTheme();
+    renderInChargeChecklist(['China Operations']);
+    setLoginMode('staff');
+    populateCompletedYearFilter();
+    renderCompletedPage();
+  </script>
+</body>
+</html>
